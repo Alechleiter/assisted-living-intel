@@ -19,6 +19,7 @@ export default function Facilities({ facilities }: Props) {
   const [sortKey, setSortKey] = useState<SortKey>("capacity");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
   const [page, setPage] = useState(0);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
   const perPage = 50;
 
   const counties = useMemo(
@@ -195,54 +196,168 @@ export default function Facilities({ facilities }: Props) {
                     : f.status === "PENDING"
                     ? "badge-pending"
                     : "badge-probation";
+                const isExpanded = expandedId === f.number;
                 return (
-                  <tr key={f.number} className="table-row">
-                    <td className="px-4 py-3">
-                      <div className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>
-                        {f.name}
-                      </div>
-                      <div className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>
-                        {f.address}
-                      </div>
-                    </td>
-                    <td className="px-4 py-3 text-xs" style={{ color: "var(--text-secondary)" }}>
-                      {f.city}
-                    </td>
-                    <td className="px-4 py-3 text-xs" style={{ color: "var(--text-secondary)" }}>
-                      {f.county}
-                    </td>
-                    <td className="px-4 py-3 text-xs font-mono" style={{ color: "var(--text-secondary)" }}>
-                      {f.zip}
-                    </td>
-                    <td className="px-4 py-3">
-                      <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${badgeClass}`}>
-                        {f.status}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3">
-                      {f.gpo !== "None" ? (
-                        <span className="text-xs font-medium px-2 py-0.5 rounded-full" style={{
-                          background: f.gpo.includes("Premier") && f.gpo.includes("Vizient") ? "rgba(6,182,212,0.12)" : f.gpo.includes("Premier") ? "rgba(59,130,246,0.12)" : "rgba(139,92,246,0.12)",
-                          color: f.gpo.includes("Premier") && f.gpo.includes("Vizient") ? "#06b6d4" : f.gpo.includes("Premier") ? "#3b82f6" : "#8b5cf6",
-                          border: `1px solid ${f.gpo.includes("Premier") && f.gpo.includes("Vizient") ? "rgba(6,182,212,0.25)" : f.gpo.includes("Premier") ? "rgba(59,130,246,0.25)" : "rgba(139,92,246,0.25)"}`,
-                        }}>
-                          {f.gpo}
-                        </span>
-                      ) : (
-                        <span className="text-xs" style={{ color: "var(--text-muted)" }}>—</span>
-                      )}
-                    </td>
-                    <td className="px-4 py-3 text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        <div className="w-16 capacity-bar-bg">
-                          <div className="capacity-bar-fill" style={{ width: `${(f.capacity / maxCap) * 100}%` }} />
+                  <>
+                    <tr
+                      key={f.number}
+                      className={`table-row cursor-pointer ${isExpanded ? "expanded-row" : ""}`}
+                      onClick={() => setExpandedId(isExpanded ? null : f.number)}
+                    >
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-2">
+                          <svg
+                            width="12" height="12" viewBox="0 0 24 24" fill="none"
+                            stroke="var(--text-muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                            className="flex-shrink-0 transition-transform"
+                            style={{ transform: isExpanded ? "rotate(90deg)" : "rotate(0deg)" }}
+                          >
+                            <polyline points="9 18 15 12 9 6" />
+                          </svg>
+                          <div>
+                            <div className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>
+                              {f.name}
+                            </div>
+                            <div className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>
+                              {f.address}
+                            </div>
+                          </div>
                         </div>
-                        <span className="text-sm font-bold font-mono w-10 text-right" style={{ color: "var(--accent)" }}>
-                          {f.capacity.toLocaleString()}
+                      </td>
+                      <td className="px-4 py-3 text-xs" style={{ color: "var(--text-secondary)" }}>
+                        {f.city}
+                      </td>
+                      <td className="px-4 py-3 text-xs" style={{ color: "var(--text-secondary)" }}>
+                        {f.county}
+                      </td>
+                      <td className="px-4 py-3 text-xs font-mono" style={{ color: "var(--text-secondary)" }}>
+                        {f.zip}
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${badgeClass}`}>
+                          {f.status}
                         </span>
-                      </div>
-                    </td>
-                  </tr>
+                      </td>
+                      <td className="px-4 py-3">
+                        {f.gpo !== "None" ? (
+                          <span className="text-xs font-medium px-2 py-0.5 rounded-full" style={{
+                            background: f.gpo.includes("Premier") && f.gpo.includes("Vizient") ? "rgba(6,182,212,0.12)" : f.gpo.includes("Premier") ? "rgba(59,130,246,0.12)" : "rgba(139,92,246,0.12)",
+                            color: f.gpo.includes("Premier") && f.gpo.includes("Vizient") ? "#06b6d4" : f.gpo.includes("Premier") ? "#3b82f6" : "#8b5cf6",
+                            border: `1px solid ${f.gpo.includes("Premier") && f.gpo.includes("Vizient") ? "rgba(6,182,212,0.25)" : f.gpo.includes("Premier") ? "rgba(59,130,246,0.25)" : "rgba(139,92,246,0.25)"}`,
+                          }}>
+                            {f.gpo}
+                          </span>
+                        ) : (
+                          <span className="text-xs" style={{ color: "var(--text-muted)" }}>—</span>
+                        )}
+                      </td>
+                      <td className="px-4 py-3 text-right">
+                        <div className="flex items-center justify-end gap-2">
+                          <div className="w-16 capacity-bar-bg">
+                            <div className="capacity-bar-fill" style={{ width: `${(f.capacity / maxCap) * 100}%` }} />
+                          </div>
+                          <span className="text-sm font-bold font-mono w-10 text-right" style={{ color: "var(--accent)" }}>
+                            {f.capacity.toLocaleString()}
+                          </span>
+                        </div>
+                      </td>
+                    </tr>
+                    {isExpanded && (
+                      <tr key={`${f.number}-detail`} className="detail-row">
+                        <td colSpan={7} className="px-4 py-0">
+                          <div className="detail-panel">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                              {/* Phone */}
+                              <div className="detail-item">
+                                <div className="detail-icon">
+                                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z" />
+                                  </svg>
+                                </div>
+                                <div>
+                                  <p className="text-xs uppercase tracking-wider mb-0.5" style={{ color: "var(--text-muted)" }}>Phone</p>
+                                  <p className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>
+                                    {f.phone ? (
+                                      <a href={`tel:${f.phone}`} className="detail-link" onClick={(e) => e.stopPropagation()}>
+                                        {f.phone}
+                                      </a>
+                                    ) : "—"}
+                                  </p>
+                                </div>
+                              </div>
+                              {/* Administrator */}
+                              <div className="detail-item">
+                                <div className="detail-icon">
+                                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                                    <circle cx="12" cy="7" r="4" />
+                                  </svg>
+                                </div>
+                                <div>
+                                  <p className="text-xs uppercase tracking-wider mb-0.5" style={{ color: "var(--text-muted)" }}>Administrator</p>
+                                  <p className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>
+                                    {f.administrator || "—"}
+                                  </p>
+                                </div>
+                              </div>
+                              {/* Licensee */}
+                              <div className="detail-item">
+                                <div className="detail-icon">
+                                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16" />
+                                    <path d="M1 21h22" />
+                                    <path d="M9 7h1m-1 4h1m4-4h1m-1 4h1" />
+                                  </svg>
+                                </div>
+                                <div>
+                                  <p className="text-xs uppercase tracking-wider mb-0.5" style={{ color: "var(--text-muted)" }}>Licensee</p>
+                                  <p className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>
+                                    {f.licensee || "—"}
+                                  </p>
+                                </div>
+                              </div>
+                              {/* Full Address */}
+                              <div className="detail-item">
+                                <div className="detail-icon">
+                                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                                    <circle cx="12" cy="10" r="3" />
+                                  </svg>
+                                </div>
+                                <div>
+                                  <p className="text-xs uppercase tracking-wider mb-0.5" style={{ color: "var(--text-muted)" }}>Address</p>
+                                  <p className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>
+                                    {f.address}, {f.city}, {f.state} {f.zip}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                            {/* Bottom row - license info */}
+                            <div className="flex flex-wrap items-center gap-4 mt-3 pt-3" style={{ borderTop: "1px solid var(--border)" }}>
+                              <div className="flex items-center gap-2">
+                                <span className="text-xs" style={{ color: "var(--text-muted)" }}>Facility #:</span>
+                                <span className="text-xs font-mono font-medium" style={{ color: "var(--text-secondary)" }}>{f.number}</span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <span className="text-xs" style={{ color: "var(--text-muted)" }}>Type:</span>
+                                <span className="text-xs font-medium" style={{ color: "var(--text-secondary)" }}>
+                                  {f.type.includes("CONTINUING CARE") ? "CCRC" : "RCFE"}
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <span className="text-xs" style={{ color: "var(--text-muted)" }}>Licensed:</span>
+                                <span className="text-xs font-medium" style={{ color: "var(--text-secondary)" }}>{f.licenseDate || "—"}</span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <span className="text-xs" style={{ color: "var(--text-muted)" }}>Capacity:</span>
+                                <span className="text-xs font-bold" style={{ color: "var(--accent)" }}>{f.capacity} rooms</span>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </>
                 );
               })}
             </tbody>

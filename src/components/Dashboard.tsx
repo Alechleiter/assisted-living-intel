@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useState, useMemo } from "react";
 import type { Facility } from "../app/page";
 
 type Props = {
@@ -16,6 +16,7 @@ type Props = {
 };
 
 export default function Dashboard({ facilities, stats }: Props) {
+  const [expandedId, setExpandedId] = useState<string | null>(null);
   // Top counties by capacity
   const countyData = useMemo(() => {
     const map: Record<string, { count: number; capacity: number }> = {};
@@ -382,43 +383,136 @@ export default function Dashboard({ facilities, stats }: Props) {
               </tr>
             </thead>
             <tbody>
-              {topFacilities.map((f, i) => (
-                <tr key={f.number} className="table-row">
-                  <td className="py-3 pr-4 text-xs font-mono" style={{ color: i < 3 ? "var(--accent)" : "var(--text-muted)" }}>
-                    {i + 1}
-                  </td>
-                  <td className="py-3 pr-4 text-sm font-medium" style={{ color: "var(--text-primary)" }}>
-                    {f.name}
-                  </td>
-                  <td className="py-3 pr-4 text-xs" style={{ color: "var(--text-secondary)" }}>
-                    {f.city}
-                  </td>
-                  <td className="py-3 pr-4 text-xs" style={{ color: "var(--text-secondary)" }}>
-                    {f.county}
-                  </td>
-                  <td className="py-3 pr-4 text-xs font-mono" style={{ color: "var(--text-secondary)" }}>
-                    {f.zip}
-                  </td>
-                  <td className="py-3 pr-4">
-                    {f.gpo !== "None" ? (
-                      <span className="text-xs font-medium px-2 py-0.5 rounded-full" style={{
-                        background: f.gpo.includes("Premier") && f.gpo.includes("Vizient") ? "rgba(6,182,212,0.12)" : f.gpo.includes("Premier") ? "rgba(59,130,246,0.12)" : "rgba(139,92,246,0.12)",
-                        color: f.gpo.includes("Premier") && f.gpo.includes("Vizient") ? "#06b6d4" : f.gpo.includes("Premier") ? "#3b82f6" : "#8b5cf6",
-                        border: `1px solid ${f.gpo.includes("Premier") && f.gpo.includes("Vizient") ? "rgba(6,182,212,0.25)" : f.gpo.includes("Premier") ? "rgba(59,130,246,0.25)" : "rgba(139,92,246,0.25)"}`,
-                      }}>
-                        {f.gpo}
-                      </span>
-                    ) : (
-                      <span className="text-xs" style={{ color: "var(--text-muted)" }}>—</span>
+              {topFacilities.map((f, i) => {
+                const isExpanded = expandedId === f.number;
+                return (
+                  <>
+                    <tr
+                      key={f.number}
+                      className={`table-row cursor-pointer ${isExpanded ? "expanded-row" : ""}`}
+                      onClick={() => setExpandedId(isExpanded ? null : f.number)}
+                    >
+                      <td className="py-3 pr-4 text-xs font-mono" style={{ color: i < 3 ? "var(--accent)" : "var(--text-muted)" }}>
+                        {i + 1}
+                      </td>
+                      <td className="py-3 pr-4">
+                        <div className="flex items-center gap-2">
+                          <svg
+                            width="10" height="10" viewBox="0 0 24 24" fill="none"
+                            stroke="var(--text-muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                            className="flex-shrink-0 transition-transform"
+                            style={{ transform: isExpanded ? "rotate(90deg)" : "rotate(0deg)" }}
+                          >
+                            <polyline points="9 18 15 12 9 6" />
+                          </svg>
+                          <span className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>{f.name}</span>
+                        </div>
+                      </td>
+                      <td className="py-3 pr-4 text-xs" style={{ color: "var(--text-secondary)" }}>
+                        {f.city}
+                      </td>
+                      <td className="py-3 pr-4 text-xs" style={{ color: "var(--text-secondary)" }}>
+                        {f.county}
+                      </td>
+                      <td className="py-3 pr-4 text-xs font-mono" style={{ color: "var(--text-secondary)" }}>
+                        {f.zip}
+                      </td>
+                      <td className="py-3 pr-4">
+                        {f.gpo !== "None" ? (
+                          <span className="text-xs font-medium px-2 py-0.5 rounded-full" style={{
+                            background: f.gpo.includes("Premier") && f.gpo.includes("Vizient") ? "rgba(6,182,212,0.12)" : f.gpo.includes("Premier") ? "rgba(59,130,246,0.12)" : "rgba(139,92,246,0.12)",
+                            color: f.gpo.includes("Premier") && f.gpo.includes("Vizient") ? "#06b6d4" : f.gpo.includes("Premier") ? "#3b82f6" : "#8b5cf6",
+                            border: `1px solid ${f.gpo.includes("Premier") && f.gpo.includes("Vizient") ? "rgba(6,182,212,0.25)" : f.gpo.includes("Premier") ? "rgba(59,130,246,0.25)" : "rgba(139,92,246,0.25)"}`,
+                          }}>
+                            {f.gpo}
+                          </span>
+                        ) : (
+                          <span className="text-xs" style={{ color: "var(--text-muted)" }}>—</span>
+                        )}
+                      </td>
+                      <td className="py-3 text-right">
+                        <span className="text-sm font-bold font-mono" style={{ color: "var(--accent)" }}>
+                          {f.capacity.toLocaleString()}
+                        </span>
+                      </td>
+                    </tr>
+                    {isExpanded && (
+                      <tr key={`${f.number}-detail`} className="detail-row">
+                        <td colSpan={7} className="px-2 py-0">
+                          <div className="detail-panel">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                              <div className="detail-item">
+                                <div className="detail-icon">
+                                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z" />
+                                  </svg>
+                                </div>
+                                <div>
+                                  <p className="text-xs uppercase tracking-wider mb-0.5" style={{ color: "var(--text-muted)" }}>Phone</p>
+                                  <p className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>
+                                    {f.phone ? (
+                                      <a href={`tel:${f.phone}`} className="detail-link" onClick={(e) => e.stopPropagation()}>
+                                        {f.phone}
+                                      </a>
+                                    ) : "—"}
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="detail-item">
+                                <div className="detail-icon">
+                                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                                    <circle cx="12" cy="7" r="4" />
+                                  </svg>
+                                </div>
+                                <div>
+                                  <p className="text-xs uppercase tracking-wider mb-0.5" style={{ color: "var(--text-muted)" }}>Administrator</p>
+                                  <p className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>{f.administrator || "—"}</p>
+                                </div>
+                              </div>
+                              <div className="detail-item">
+                                <div className="detail-icon">
+                                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16" />
+                                    <path d="M1 21h22" />
+                                    <path d="M9 7h1m-1 4h1m4-4h1m-1 4h1" />
+                                  </svg>
+                                </div>
+                                <div>
+                                  <p className="text-xs uppercase tracking-wider mb-0.5" style={{ color: "var(--text-muted)" }}>Licensee</p>
+                                  <p className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>{f.licensee || "—"}</p>
+                                </div>
+                              </div>
+                              <div className="detail-item">
+                                <div className="detail-icon">
+                                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                                    <circle cx="12" cy="10" r="3" />
+                                  </svg>
+                                </div>
+                                <div>
+                                  <p className="text-xs uppercase tracking-wider mb-0.5" style={{ color: "var(--text-muted)" }}>Address</p>
+                                  <p className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>{f.address}, {f.city}, {f.state} {f.zip}</p>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex flex-wrap items-center gap-4 mt-3 pt-3" style={{ borderTop: "1px solid var(--border)" }}>
+                              <div className="flex items-center gap-2">
+                                <span className="text-xs" style={{ color: "var(--text-muted)" }}>Facility #:</span>
+                                <span className="text-xs font-mono font-medium" style={{ color: "var(--text-secondary)" }}>{f.number}</span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <span className="text-xs" style={{ color: "var(--text-muted)" }}>Licensed:</span>
+                                <span className="text-xs font-medium" style={{ color: "var(--text-secondary)" }}>{f.licenseDate || "—"}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
                     )}
-                  </td>
-                  <td className="py-3 text-right">
-                    <span className="text-sm font-bold font-mono" style={{ color: "var(--accent)" }}>
-                      {f.capacity.toLocaleString()}
-                    </span>
-                  </td>
-                </tr>
-              ))}
+                  </>
+                );
+              })}
             </tbody>
           </table>
         </div>
