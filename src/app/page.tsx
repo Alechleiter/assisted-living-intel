@@ -21,6 +21,7 @@ export type Facility = {
   capacity: number;
   status: string;
   licenseDate: string;
+  gpo: string;
 };
 
 const tabs = [

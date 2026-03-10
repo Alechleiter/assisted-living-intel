@@ -7,7 +7,7 @@ type Props = {
   facilities: Facility[];
 };
 
-type SortKey = "name" | "city" | "county" | "capacity" | "zip" | "status";
+type SortKey = "name" | "city" | "county" | "capacity" | "zip" | "status" | "gpo";
 type SortDir = "asc" | "desc";
 
 export default function Facilities({ facilities }: Props) {
@@ -15,6 +15,7 @@ export default function Facilities({ facilities }: Props) {
   const [countyFilter, setCountyFilter] = useState("ALL");
   const [statusFilter, setStatusFilter] = useState("ALL");
   const [typeFilter, setTypeFilter] = useState("ALL");
+  const [gpoFilter, setGpoFilter] = useState("ALL");
   const [sortKey, setSortKey] = useState<SortKey>("capacity");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
   const [page, setPage] = useState(0);
@@ -32,6 +33,12 @@ export default function Facilities({ facilities }: Props) {
     if (typeFilter !== "ALL") {
       if (typeFilter === "CCRC") data = data.filter((f) => f.type.includes("CONTINUING CARE"));
       else data = data.filter((f) => !f.type.includes("CONTINUING CARE"));
+    }
+    if (gpoFilter !== "ALL") {
+      if (gpoFilter === "PREMIER") data = data.filter((f) => f.gpo.includes("Premier"));
+      else if (gpoFilter === "VIZIENT") data = data.filter((f) => f.gpo.includes("Vizient"));
+      else if (gpoFilter === "BOTH") data = data.filter((f) => f.gpo === "Premier, Vizient");
+      else if (gpoFilter === "NONE") data = data.filter((f) => f.gpo === "None");
     }
     if (search) {
       const q = search.toLowerCase();
@@ -54,7 +61,7 @@ export default function Facilities({ facilities }: Props) {
       return mul * av.localeCompare(bv);
     });
     return data;
-  }, [facilities, search, countyFilter, statusFilter, typeFilter, sortKey, sortDir]);
+  }, [facilities, search, countyFilter, statusFilter, typeFilter, gpoFilter, sortKey, sortDir]);
 
   const totalPages = Math.ceil(filtered.length / perPage);
   const paged = filtered.slice(page * perPage, (page + 1) * perPage);
@@ -143,6 +150,13 @@ export default function Facilities({ facilities }: Props) {
             <option value="RCFE">RCFE</option>
             <option value="CCRC">CCRC</option>
           </select>
+          <select value={gpoFilter} onChange={(e) => { setGpoFilter(e.target.value); setPage(0); }} className="text-sm">
+            <option value="ALL">All GPOs</option>
+            <option value="PREMIER">Premier</option>
+            <option value="VIZIENT">Vizient</option>
+            <option value="BOTH">Both GPOs</option>
+            <option value="NONE">No GPO</option>
+          </select>
         </div>
       </div>
 
@@ -158,6 +172,7 @@ export default function Facilities({ facilities }: Props) {
                   { key: "county" as SortKey, label: "County" },
                   { key: "zip" as SortKey, label: "Zip" },
                   { key: "status" as SortKey, label: "Status" },
+                  { key: "gpo" as SortKey, label: "GPO" },
                   { key: "capacity" as SortKey, label: "Rooms", align: "right" },
                 ].map((col) => (
                   <th
@@ -203,6 +218,19 @@ export default function Facilities({ facilities }: Props) {
                       <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${badgeClass}`}>
                         {f.status}
                       </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      {f.gpo !== "None" ? (
+                        <span className="text-xs font-medium px-2 py-0.5 rounded-full" style={{
+                          background: f.gpo.includes("Premier") && f.gpo.includes("Vizient") ? "rgba(6,182,212,0.12)" : f.gpo.includes("Premier") ? "rgba(59,130,246,0.12)" : "rgba(139,92,246,0.12)",
+                          color: f.gpo.includes("Premier") && f.gpo.includes("Vizient") ? "#06b6d4" : f.gpo.includes("Premier") ? "#3b82f6" : "#8b5cf6",
+                          border: `1px solid ${f.gpo.includes("Premier") && f.gpo.includes("Vizient") ? "rgba(6,182,212,0.25)" : f.gpo.includes("Premier") ? "rgba(59,130,246,0.25)" : "rgba(139,92,246,0.25)"}`,
+                        }}>
+                          {f.gpo}
+                        </span>
+                      ) : (
+                        <span className="text-xs" style={{ color: "var(--text-muted)" }}>—</span>
+                      )}
                     </td>
                     <td className="px-4 py-3 text-right">
                       <div className="flex items-center justify-end gap-2">

@@ -71,6 +71,25 @@ export default function Dashboard({ facilities, stats }: Props) {
       .sort((a, b) => b.count - a.count);
   }, [facilities]);
 
+  // GPO breakdown
+  const gpoData = useMemo(() => {
+    let premier = 0, vizient = 0, both = 0, none = 0;
+    let premierCap = 0, vizientCap = 0, bothCap = 0, noneCap = 0;
+    facilities.forEach((f) => {
+      const g = f.gpo || "None";
+      if (g === "Premier, Vizient") { both++; bothCap += f.capacity; }
+      else if (g === "Premier") { premier++; premierCap += f.capacity; }
+      else if (g === "Vizient") { vizient++; vizientCap += f.capacity; }
+      else { none++; noneCap += f.capacity; }
+    });
+    return [
+      { name: "Premier", count: premier + both, capacity: premierCap + bothCap, color: "#3b82f6" },
+      { name: "Vizient", count: vizient + both, capacity: vizientCap + bothCap, color: "#8b5cf6" },
+      { name: "Both GPOs", count: both, capacity: bothCap, color: "#06b6d4" },
+      { name: "No GPO", count: none, capacity: noneCap, color: "var(--text-muted)" },
+    ];
+  }, [facilities]);
+
   // Capacity distribution buckets
   const capacityBuckets = useMemo(() => {
     const buckets = [
@@ -186,6 +205,34 @@ export default function Dashboard({ facilities, stats }: Props) {
           <p className="text-xs text-center mt-3" style={{ color: "var(--text-muted)" }}>
             Rooms per facility
           </p>
+        </div>
+      </div>
+
+      {/* GPO Affiliation Row */}
+      <div className="card p-6 mb-6">
+        <h3 className="text-sm font-semibold mb-1" style={{ color: "var(--text-primary)" }}>
+          GPO Affiliation
+        </h3>
+        <p className="text-xs mb-5" style={{ color: "var(--text-muted)" }}>
+          Group Purchasing Organization membership across facilities
+        </p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {gpoData.map((g) => (
+            <div key={g.name} className="p-4 rounded-lg" style={{ background: "var(--bg-secondary)" }}>
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-2.5 h-2.5 rounded-full" style={{ background: g.color }} />
+                <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: "var(--text-secondary)" }}>
+                  {g.name}
+                </span>
+              </div>
+              <p className="text-2xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--text-primary)" }}>
+                {g.count.toLocaleString()}
+              </p>
+              <p className="text-xs mt-1" style={{ color: "var(--text-muted)" }}>
+                {g.capacity.toLocaleString()} rooms &middot; {((g.count / stats.total) * 100).toFixed(1)}%
+              </p>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -326,6 +373,9 @@ export default function Dashboard({ facilities, stats }: Props) {
                 <th className="text-xs font-medium uppercase tracking-wider pb-3 pr-4" style={{ color: "var(--text-muted)" }}>
                   Zip
                 </th>
+                <th className="text-xs font-medium uppercase tracking-wider pb-3 pr-4" style={{ color: "var(--text-muted)" }}>
+                  GPO
+                </th>
                 <th className="text-xs font-medium uppercase tracking-wider pb-3 text-right" style={{ color: "var(--text-muted)" }}>
                   Rooms
                 </th>
@@ -348,6 +398,19 @@ export default function Dashboard({ facilities, stats }: Props) {
                   </td>
                   <td className="py-3 pr-4 text-xs font-mono" style={{ color: "var(--text-secondary)" }}>
                     {f.zip}
+                  </td>
+                  <td className="py-3 pr-4">
+                    {f.gpo !== "None" ? (
+                      <span className="text-xs font-medium px-2 py-0.5 rounded-full" style={{
+                        background: f.gpo.includes("Premier") && f.gpo.includes("Vizient") ? "rgba(6,182,212,0.12)" : f.gpo.includes("Premier") ? "rgba(59,130,246,0.12)" : "rgba(139,92,246,0.12)",
+                        color: f.gpo.includes("Premier") && f.gpo.includes("Vizient") ? "#06b6d4" : f.gpo.includes("Premier") ? "#3b82f6" : "#8b5cf6",
+                        border: `1px solid ${f.gpo.includes("Premier") && f.gpo.includes("Vizient") ? "rgba(6,182,212,0.25)" : f.gpo.includes("Premier") ? "rgba(59,130,246,0.25)" : "rgba(139,92,246,0.25)"}`,
+                      }}>
+                        {f.gpo}
+                      </span>
+                    ) : (
+                      <span className="text-xs" style={{ color: "var(--text-muted)" }}>—</span>
+                    )}
                   </td>
                   <td className="py-3 text-right">
                     <span className="text-sm font-bold font-mono" style={{ color: "var(--accent)" }}>

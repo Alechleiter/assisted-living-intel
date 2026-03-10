@@ -22,12 +22,14 @@ export default function ZipCodes({ facilities }: Props) {
   );
 
   const zipData = useMemo(() => {
-    const map: Record<string, { zip: string; count: number; capacity: number; county: string; cities: Set<string> }> = {};
+    const map: Record<string, { zip: string; count: number; capacity: number; county: string; cities: Set<string>; premier: number; vizient: number }> = {};
     facilities.forEach((f) => {
-      if (!map[f.zip]) map[f.zip] = { zip: f.zip, count: 0, capacity: 0, county: f.county, cities: new Set() };
+      if (!map[f.zip]) map[f.zip] = { zip: f.zip, count: 0, capacity: 0, county: f.county, cities: new Set(), premier: 0, vizient: 0 };
       map[f.zip].count++;
       map[f.zip].capacity += f.capacity;
       map[f.zip].cities.add(f.city);
+      if (f.gpo.includes("Premier")) map[f.zip].premier++;
+      if (f.gpo.includes("Vizient")) map[f.zip].vizient++;
     });
     return Object.values(map).map((d) => ({
       ...d,
@@ -146,6 +148,8 @@ export default function ZipCodes({ facilities }: Props) {
                   { key: "count" as SortKey, label: "Facilities", align: "right" },
                   { key: "capacity" as SortKey, label: "Total Rooms", align: "right" },
                   { key: "avg" as SortKey, label: "Avg Rooms", align: "right" },
+                  { key: "zip" as SortKey, label: "Premier", align: "center", noSort: true },
+                  { key: "zip" as SortKey, label: "Vizient", align: "center", noSort: true },
                   { key: "capacity" as SortKey, label: "Capacity", align: "left", noSort: true, isBar: true },
                 ].map((col, i) => (
                   <th
@@ -182,6 +186,20 @@ export default function ZipCodes({ facilities }: Props) {
                   </td>
                   <td className="px-4 py-3 text-sm text-right font-mono" style={{ color: "var(--text-secondary)" }}>
                     {d.avg.toLocaleString()}
+                  </td>
+                  <td className="px-4 py-3 text-center">
+                    {d.premier > 0 ? (
+                      <span className="text-xs font-bold font-mono" style={{ color: "#3b82f6" }}>{d.premier}</span>
+                    ) : (
+                      <span className="text-xs" style={{ color: "var(--text-muted)" }}>—</span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3 text-center">
+                    {d.vizient > 0 ? (
+                      <span className="text-xs font-bold font-mono" style={{ color: "#8b5cf6" }}>{d.vizient}</span>
+                    ) : (
+                      <span className="text-xs" style={{ color: "var(--text-muted)" }}>—</span>
+                    )}
                   </td>
                   <td className="px-4 py-3 w-40">
                     <div className="capacity-bar-bg">
