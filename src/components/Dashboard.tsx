@@ -3,6 +3,22 @@
 import { useState, useMemo } from "react";
 import type { Facility } from "../app/page";
 
+function Tip({ text, children }: { text: string; children: React.ReactNode }) {
+  return (
+    <span className="tooltip-wrap">
+      {children}
+      <span className="tooltip-icon">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M12 16v-4" />
+          <path d="M12 8h.01" />
+        </svg>
+      </span>
+      <span className="tooltip-bubble">{text}</span>
+    </span>
+  );
+}
+
 type Props = {
   facilities: Facility[];
   stats: {
@@ -122,16 +138,16 @@ export default function Dashboard({ facilities, stats }: Props) {
       {/* Stat Cards */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
         {[
-          { label: "Total Facilities", value: stats.total.toLocaleString(), sub: "statewide", delay: 1 },
-          { label: "Total Rooms", value: stats.totalCapacity.toLocaleString(), sub: "bed capacity", delay: 2 },
-          { label: "Avg Capacity", value: stats.avgCapacity.toLocaleString(), sub: "rooms/facility", delay: 3 },
-          { label: "Licensed", value: stats.licensed.toLocaleString(), sub: `${((stats.licensed / stats.total) * 100).toFixed(1)}% of total`, delay: 4 },
-          { label: "Zip Codes", value: stats.uniqueZips.toLocaleString(), sub: "coverage areas", delay: 5 },
-          { label: "Counties", value: stats.uniqueCounties.toLocaleString(), sub: "CA counties", delay: 6 },
+          { label: "Total Facilities", value: stats.total.toLocaleString(), sub: "statewide", delay: 1, tip: "Total number of assisted living sites (RCFEs) across California, including both standard and CCRC facilities" },
+          { label: "Total Rooms", value: stats.totalCapacity.toLocaleString(), sub: "bed capacity", delay: 2, tip: "Combined room/bed capacity across all facilities. Each room represents one licensed resident bed" },
+          { label: "Avg Capacity", value: stats.avgCapacity.toLocaleString(), sub: "rooms/facility", delay: 3, tip: "Average number of rooms per facility. Ranges from 1\u20136 bed homes to 500+ room communities" },
+          { label: "Licensed", value: stats.licensed.toLocaleString(), sub: `${((stats.licensed / stats.total) * 100).toFixed(1)}% of total`, delay: 4, tip: "Facilities with an active license from CA Community Care Licensing. Others may be Pending or On Probation" },
+          { label: "Zip Codes", value: stats.uniqueZips.toLocaleString(), sub: "coverage areas", delay: 5, tip: "Number of unique zip codes with at least one assisted living facility" },
+          { label: "Counties", value: stats.uniqueCounties.toLocaleString(), sub: "CA counties", delay: 6, tip: "Number of California counties represented. CA has 58 total counties" },
         ].map((s) => (
           <div key={s.label} className={`card stat-glow p-5 fade-up fade-up-${s.delay}`}>
             <p className="text-xs font-medium uppercase tracking-wider mb-2" style={{ color: "var(--text-muted)" }}>
-              {s.label}
+              <Tip text={s.tip}>{s.label}</Tip>
             </p>
             <p className="text-2xl font-bold tracking-tight" style={{ fontFamily: "var(--font-display)", color: "var(--accent)" }}>
               {s.value}
@@ -148,7 +164,7 @@ export default function Dashboard({ facilities, stats }: Props) {
         {/* County Chart */}
         <div className="card p-6 fade-up fade-up-7">
           <h3 className="text-sm font-semibold mb-1" style={{ color: "var(--text-primary)" }}>
-            Rooms by County
+            <Tip text="Rooms = licensed bed capacity at each site. Sites = individual assisted living locations. Each bar shows the total rooms in that county.">Rooms by County</Tip>
           </h3>
           <p className="text-xs mb-5" style={{ color: "var(--text-muted)" }}>
             Top 12 counties by total facility capacity
@@ -183,7 +199,7 @@ export default function Dashboard({ facilities, stats }: Props) {
         {/* Capacity Distribution */}
         <div className="card p-6 fade-up fade-up-8">
           <h3 className="text-sm font-semibold mb-1" style={{ color: "var(--text-primary)" }}>
-            Capacity Distribution
+            <Tip text="Shows how many facilities fall into each size range. Most assisted living sites are small (1\u201315 rooms), while a few large communities have 200+ rooms.">Capacity Distribution</Tip>
           </h3>
           <p className="text-xs mb-5" style={{ color: "var(--text-muted)" }}>
             Number of facilities by room count range
@@ -212,7 +228,7 @@ export default function Dashboard({ facilities, stats }: Props) {
       {/* GPO Affiliation Row */}
       <div className="card p-6 mb-6">
         <h3 className="text-sm font-semibold mb-1" style={{ color: "var(--text-primary)" }}>
-          GPO Affiliation
+          <Tip text="GPO = Group Purchasing Organization. GPOs negotiate bulk purchasing contracts for healthcare facilities. Premier and Vizient are the two largest GPOs in the US. Facilities in a GPO buy supplies through that GPO's contracts.">GPO Affiliation</Tip>
         </h3>
         <p className="text-xs mb-5" style={{ color: "var(--text-muted)" }}>
           Group Purchasing Organization membership across facilities
@@ -242,7 +258,7 @@ export default function Dashboard({ facilities, stats }: Props) {
         {/* Facility Type Breakdown */}
         <div className="card p-6">
           <h3 className="text-sm font-semibold mb-1" style={{ color: "var(--text-primary)" }}>
-            Facility Types
+            <Tip text="RCFE = Residential Care Facility for the Elderly. The standard assisted living license in California. CCRC = Continuing Care Retirement Community. A campus-style community offering multiple levels of care (independent living, assisted living, skilled nursing) under one license.">Facility Types</Tip>
           </h3>
           <p className="text-xs mb-5" style={{ color: "var(--text-muted)" }}>
             RCFE vs CCRC classification
@@ -280,7 +296,7 @@ export default function Dashboard({ facilities, stats }: Props) {
         {/* Status Breakdown */}
         <div className="card p-6">
           <h3 className="text-sm font-semibold mb-1" style={{ color: "var(--text-primary)" }}>
-            License Status
+            <Tip text="Licensed = active, approved to operate. Pending = application submitted, awaiting approval. On Probation = licensed but under corrective action due to violations.">License Status</Tip>
           </h3>
           <p className="text-xs mb-5" style={{ color: "var(--text-muted)" }}>
             Active license status distribution
@@ -318,7 +334,7 @@ export default function Dashboard({ facilities, stats }: Props) {
         {/* Top Cities */}
         <div className="card p-6">
           <h3 className="text-sm font-semibold mb-1" style={{ color: "var(--text-primary)" }}>
-            Top Cities by Capacity
+            <Tip text="Ranked by total room capacity across all assisted living sites in each city. Higher capacity cities represent larger markets for supplies and services.">Top Cities by Capacity</Tip>
           </h3>
           <p className="text-xs mb-5" style={{ color: "var(--text-muted)" }}>
             Cities with the most assisted living rooms
@@ -350,7 +366,7 @@ export default function Dashboard({ facilities, stats }: Props) {
       {/* Top 10 Largest Facilities */}
       <div className="card p-6">
         <h3 className="text-sm font-semibold mb-1" style={{ color: "var(--text-primary)" }}>
-          Largest Facilities
+          <Tip text="The 10 largest assisted living communities by licensed room count. Click any row to see contact details including phone, administrator, and licensee.">Largest Facilities</Tip>
         </h3>
         <p className="text-xs mb-5" style={{ color: "var(--text-muted)" }}>
           Top 10 facilities by room capacity
