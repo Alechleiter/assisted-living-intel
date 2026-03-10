@@ -80,7 +80,7 @@ export default function Home() {
                 CA Assisted Living Intel
               </h1>
               <p className="text-xs" style={{ color: "var(--text-muted)" }}>
-                {stats.total.toLocaleString()} facilities &middot; {stats.totalCapacity.toLocaleString()} rooms
+                {stats.total.toLocaleString()} facilities &middot; {stats.totalCapacity.toLocaleString()} rooms &middot; 25+ rooms only
               </p>
             </div>
           </div>
@@ -110,7 +110,7 @@ export default function Home() {
 
       <footer className="relative z-10 text-center py-8" style={{ borderTop: "1px solid var(--border)" }}>
         <p className="text-xs" style={{ color: "var(--text-muted)" }}>
-          California RCFE Facility Data &middot; Source: CA Community Care Licensing &middot; 2025
+          California RCFE Facility Data &middot; Sites with 25+ guest rooms only &middot; Source: CA Community Care Licensing &middot; 2025
         </p>
       </footer>
     </div>
