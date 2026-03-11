@@ -87,24 +87,40 @@ export default function ZipCodes({ facilities }: Props) {
   );
 
   const exportToExcel = useCallback(() => {
-    const rows = filtered.map((d) => ({
-      "Zip Code": d.zip,
-      "County": d.county,
-      "Cities": d.citiesList,
-      "Facilities": d.count,
-      "Total Rooms": d.capacity,
-      "Avg Rooms": d.avg,
-      "Premier": d.premier,
-      "Vizient": d.vizient,
-    }));
+    const rows: Record<string, string | number>[] = [];
+    filtered.forEach((d) => {
+      d.facilities
+        .sort((a, b) => b.capacity - a.capacity)
+        .forEach((f) => {
+          rows.push({
+            "Zip Code": f.zip,
+            "County": f.county,
+            "City": f.city,
+            "Facility Name": f.name,
+            "Address": f.address,
+            "Phone": f.phone || "",
+            "Administrator": f.administrator || "",
+            "Licensee": f.licensee || "",
+            "Rooms": f.capacity,
+            "Type": f.type.includes("CONTINUING CARE") ? "CCRC" : "RCFE",
+            "Status": f.status,
+            "License Date": f.licenseDate || "",
+            "GPO": f.gpo === "None" ? "" : f.gpo,
+            "Facility #": f.number,
+          });
+        });
+    });
     const ws = XLSX.utils.json_to_sheet(rows);
     ws["!cols"] = [
-      { wch: 10 }, { wch: 18 }, { wch: 30 }, { wch: 10 },
-      { wch: 12 }, { wch: 10 }, { wch: 8 }, { wch: 8 },
+      { wch: 10 }, { wch: 18 }, { wch: 20 }, { wch: 40 },
+      { wch: 35 }, { wch: 15 }, { wch: 25 }, { wch: 35 },
+      { wch: 8 }, { wch: 6 }, { wch: 12 }, { wch: 12 },
+      { wch: 18 }, { wch: 12 },
     ];
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Zip Codes");
-    XLSX.writeFile(wb, `CA_Assisted_Living_ZipCodes_${filtered.length}.xlsx`);
+    XLSX.utils.book_append_sheet(wb, ws, "Facilities by Zip");
+    const totalFacilities = rows.length;
+    XLSX.writeFile(wb, `CA_Assisted_Living_${filtered.length}Zips_${totalFacilities}Facilities.xlsx`);
   }, [filtered]);
 
   return (
@@ -254,47 +270,88 @@ export default function ZipCodes({ facilities }: Props) {
                             <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--text-muted)" }}>
                               {d.count} {d.count === 1 ? "Facility" : "Facilities"} in {d.zip}
                             </p>
-                            <div className="grid gap-2">
+                            <div className="grid gap-3">
                               {d.facilities
                                 .sort((a, b) => b.capacity - a.capacity)
                                 .map((f) => (
                                   <div
                                     key={f.number}
-                                    className="flex items-center gap-4 px-4 py-3 rounded-lg"
+                                    className="rounded-lg px-5 py-4"
                                     style={{ background: "var(--bg-primary)", border: "1px solid var(--border)" }}
                                   >
-                                    <div className="flex-1 min-w-0">
-                                      <p className="text-sm font-semibold truncate" style={{ color: "var(--text-primary)" }}>
-                                        {f.name}
-                                      </p>
-                                      <p className="text-xs truncate" style={{ color: "var(--text-muted)" }}>
-                                        {f.address}, {f.city}
-                                      </p>
+                                    <div className="flex items-start justify-between gap-4 mb-3">
+                                      <div className="min-w-0">
+                                        <p className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>
+                                          {f.name}
+                                        </p>
+                                        <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>
+                                          {f.address}, {f.city}, {f.state} {f.zip}
+                                        </p>
+                                      </div>
+                                      <div className="text-right shrink-0">
+                                        <p className="text-lg font-bold font-mono" style={{ color: "var(--accent)" }}>
+                                          {f.capacity.toLocaleString()}
+                                        </p>
+                                        <p className="text-[10px] uppercase" style={{ color: "var(--text-muted)" }}>rooms</p>
+                                      </div>
                                     </div>
-                                    <div className="text-right shrink-0">
-                                      <p className="text-sm font-bold font-mono" style={{ color: "var(--accent)" }}>
-                                        {f.capacity.toLocaleString()}
-                                      </p>
-                                      <p className="text-[10px] uppercase" style={{ color: "var(--text-muted)" }}>rooms</p>
+                                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                                      <div>
+                                        <p className="text-[10px] uppercase tracking-wider" style={{ color: "var(--text-muted)" }}>Phone</p>
+                                        <p className="text-xs font-medium mt-0.5" style={{ color: "var(--text-primary)" }}>
+                                          {f.phone ? (
+                                            <a href={`tel:${f.phone}`} className="detail-link" onClick={(e) => e.stopPropagation()}>
+                                              {f.phone}
+                                            </a>
+                                          ) : "—"}
+                                        </p>
+                                      </div>
+                                      <div>
+                                        <p className="text-[10px] uppercase tracking-wider" style={{ color: "var(--text-muted)" }}>Administrator</p>
+                                        <p className="text-xs font-medium mt-0.5" style={{ color: "var(--text-primary)" }}>
+                                          {f.administrator || "—"}
+                                        </p>
+                                      </div>
+                                      <div>
+                                        <p className="text-[10px] uppercase tracking-wider" style={{ color: "var(--text-muted)" }}>Licensee</p>
+                                        <p className="text-xs font-medium mt-0.5" style={{ color: "var(--text-primary)" }}>
+                                          {f.licensee || "—"}
+                                        </p>
+                                      </div>
+                                      <div>
+                                        <p className="text-[10px] uppercase tracking-wider" style={{ color: "var(--text-muted)" }}>GPO</p>
+                                        <p className="text-xs font-medium mt-0.5">
+                                          {f.gpo && f.gpo !== "None" ? (
+                                            <span style={{
+                                              color: f.gpo.includes("Premier") && f.gpo.includes("Vizient") ? "#a78bfa" : f.gpo.includes("Premier") ? "#60a5fa" : "#a78bfa",
+                                            }}>
+                                              {f.gpo}
+                                            </span>
+                                          ) : (
+                                            <span style={{ color: "var(--text-muted)" }}>—</span>
+                                          )}
+                                        </p>
+                                      </div>
                                     </div>
-                                    <div className="text-right shrink-0 w-16">
-                                      {f.phone && f.phone !== "N/A" ? (
-                                        <p className="text-xs font-mono" style={{ color: "var(--text-secondary)" }}>{f.phone}</p>
-                                      ) : (
-                                        <p className="text-xs" style={{ color: "var(--text-muted)" }}>—</p>
-                                      )}
-                                    </div>
-                                    <div className="shrink-0 w-20 text-center">
-                                      {f.gpo && f.gpo !== "None" ? (
-                                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full" style={{
-                                          background: f.gpo.includes("Premier") && f.gpo.includes("Vizient") ? "rgba(139,92,246,0.15)" : f.gpo.includes("Premier") ? "rgba(59,130,246,0.15)" : "rgba(139,92,246,0.15)",
-                                          color: f.gpo.includes("Premier") && f.gpo.includes("Vizient") ? "#a78bfa" : f.gpo.includes("Premier") ? "#60a5fa" : "#a78bfa",
-                                        }}>
-                                          {f.gpo}
+                                    <div className="flex flex-wrap items-center gap-4 mt-3 pt-2" style={{ borderTop: "1px solid var(--border)" }}>
+                                      <div className="flex items-center gap-1">
+                                        <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>Facility #:</span>
+                                        <span className="text-[10px] font-mono font-medium" style={{ color: "var(--text-secondary)" }}>{f.number}</span>
+                                      </div>
+                                      <div className="flex items-center gap-1">
+                                        <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>Type:</span>
+                                        <span className="text-[10px] font-medium" style={{ color: "var(--text-secondary)" }}>
+                                          {f.type.includes("CONTINUING CARE") ? "CCRC" : "RCFE"}
                                         </span>
-                                      ) : (
-                                        <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>—</span>
-                                      )}
+                                      </div>
+                                      <div className="flex items-center gap-1">
+                                        <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>Status:</span>
+                                        <span className="text-[10px] font-medium" style={{ color: "var(--text-secondary)" }}>{f.status}</span>
+                                      </div>
+                                      <div className="flex items-center gap-1">
+                                        <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>Licensed:</span>
+                                        <span className="text-[10px] font-medium" style={{ color: "var(--text-secondary)" }}>{f.licenseDate || "—"}</span>
+                                      </div>
                                     </div>
                                   </div>
                                 ))}
