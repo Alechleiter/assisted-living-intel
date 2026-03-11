@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
+import * as XLSX from "xlsx";
 import type { Facility } from "../app/page";
 
 type Props = {
@@ -85,6 +86,35 @@ export default function Facilities({ facilities }: Props) {
   const totalCap = filtered.reduce((s, f) => s + f.capacity, 0);
   const maxCap = Math.max(...facilities.map((f) => f.capacity));
 
+  const exportToExcel = useCallback(() => {
+    const rows = filtered.map((f) => ({
+      "Facility Name": f.name,
+      "Address": f.address,
+      "City": f.city,
+      "State": f.state,
+      "Zip Code": f.zip,
+      "County": f.county,
+      "Phone": f.phone,
+      "Administrator": f.administrator,
+      "Licensee": f.licensee,
+      "Facility #": f.number,
+      "Type": f.type.includes("CONTINUING CARE") ? "CCRC" : "RCFE",
+      "Status": f.status,
+      "GPO": f.gpo,
+      "Rooms": f.capacity,
+      "License Date": f.licenseDate,
+    }));
+    const ws = XLSX.utils.json_to_sheet(rows);
+    // Auto-size columns
+    const colWidths = Object.keys(rows[0] || {}).map((key) => ({
+      wch: Math.max(key.length, ...rows.map((r) => String((r as Record<string, unknown>)[key] || "").length)).toString().length > 40 ? 40 : Math.max(key.length + 2, 12),
+    }));
+    ws["!cols"] = colWidths;
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Facilities");
+    XLSX.writeFile(wb, `CA_Assisted_Living_Facilities_${filtered.length}.xlsx`);
+  }, [filtered]);
+
   return (
     <div>
       {/* Summary */}
@@ -158,6 +188,14 @@ export default function Facilities({ facilities }: Props) {
             <option value="BOTH">Both GPOs</option>
             <option value="NONE">No GPO</option>
           </select>
+          <button onClick={exportToExcel} className="export-btn" title="Export current filtered results to Excel">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            Export Excel
+          </button>
         </div>
       </div>
 

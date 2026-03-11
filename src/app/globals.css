@@ -325,6 +325,33 @@ body::before {
   transform: translateX(-50%) translateY(0);
 }
 
+/* Export button */
+.export-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: rgba(34, 139, 34, 0.12);
+  color: #4ade80;
+  border: 1px solid rgba(34, 139, 34, 0.25);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.export-btn:hover {
+  background: rgba(34, 139, 34, 0.22);
+  border-color: rgba(74, 222, 128, 0.4);
+  color: #86efac;
+}
+
+.export-btn:active {
+  transform: scale(0.97);
+}
+
 select {
   background: var(--bg-secondary);
   border: 1px solid var(--border);

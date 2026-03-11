@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
+import * as XLSX from "xlsx";
 import type { Facility } from "../app/page";
 
 type Props = {
@@ -83,6 +84,27 @@ export default function ZipCodes({ facilities }: Props) {
     </span>
   );
 
+  const exportToExcel = useCallback(() => {
+    const rows = filtered.map((d) => ({
+      "Zip Code": d.zip,
+      "County": d.county,
+      "Cities": d.citiesList,
+      "Facilities": d.count,
+      "Total Rooms": d.capacity,
+      "Avg Rooms": d.avg,
+      "Premier": d.premier,
+      "Vizient": d.vizient,
+    }));
+    const ws = XLSX.utils.json_to_sheet(rows);
+    ws["!cols"] = [
+      { wch: 10 }, { wch: 18 }, { wch: 30 }, { wch: 10 },
+      { wch: 12 }, { wch: 10 }, { wch: 8 }, { wch: 8 },
+    ];
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Zip Codes");
+    XLSX.writeFile(wb, `CA_Assisted_Living_ZipCodes_${filtered.length}.xlsx`);
+  }, [filtered]);
+
   return (
     <div>
       {/* Summary cards */}
@@ -133,6 +155,14 @@ export default function ZipCodes({ facilities }: Props) {
             </option>
           ))}
         </select>
+        <button onClick={exportToExcel} className="export-btn" title="Export current filtered results to Excel">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          Export Excel
+        </button>
       </div>
 
       {/* Table */}
