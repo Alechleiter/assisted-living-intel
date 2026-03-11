@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { Fragment, useState, useMemo, useCallback } from "react";
 import * as XLSX from "xlsx";
 import type { Facility } from "../app/page";
 
@@ -16,6 +16,7 @@ export default function ZipCodes({ facilities }: Props) {
   const [countyFilter, setCountyFilter] = useState("ALL");
   const [sortKey, setSortKey] = useState<SortKey>("capacity");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
+  const [expandedZip, setExpandedZip] = useState<string | null>(null);
 
   const counties = useMemo(
     () => ["ALL", ...Array.from(new Set(facilities.map((f) => f.county))).sort()],
@@ -23,14 +24,15 @@ export default function ZipCodes({ facilities }: Props) {
   );
 
   const zipData = useMemo(() => {
-    const map: Record<string, { zip: string; count: number; capacity: number; county: string; cities: Set<string>; premier: number; vizient: number }> = {};
+    const map: Record<string, { zip: string; count: number; capacity: number; county: string; cities: Set<string>; premier: number; vizient: number; facilities: Facility[] }> = {};
     facilities.forEach((f) => {
-      if (!map[f.zip]) map[f.zip] = { zip: f.zip, count: 0, capacity: 0, county: f.county, cities: new Set(), premier: 0, vizient: 0 };
+      if (!map[f.zip]) map[f.zip] = { zip: f.zip, count: 0, capacity: 0, county: f.county, cities: new Set(), premier: 0, vizient: 0, facilities: [] };
       map[f.zip].count++;
       map[f.zip].capacity += f.capacity;
       map[f.zip].cities.add(f.city);
       if (f.gpo.includes("Premier")) map[f.zip].premier++;
       if (f.gpo.includes("Vizient")) map[f.zip].vizient++;
+      map[f.zip].facilities.push(f);
     });
     return Object.values(map).map((d) => ({
       ...d,
@@ -195,49 +197,115 @@ export default function ZipCodes({ facilities }: Props) {
               </tr>
             </thead>
             <tbody>
-              {filtered.slice(0, 100).map((d) => (
-                <tr key={d.zip} className="table-row">
-                  <td className="px-4 py-3 text-sm font-mono font-semibold" style={{ color: "var(--accent)" }}>
-                    {d.zip}
-                  </td>
-                  <td className="px-4 py-3 text-xs" style={{ color: "var(--text-secondary)" }}>
-                    {d.county}
-                  </td>
-                  <td className="px-4 py-3 text-xs max-w-48 truncate" style={{ color: "var(--text-secondary)" }}>
-                    {d.citiesList}
-                  </td>
-                  <td className="px-4 py-3 text-sm text-right font-mono" style={{ color: "var(--text-primary)" }}>
-                    {d.count}
-                  </td>
-                  <td className="px-4 py-3 text-right">
-                    <span className="text-sm font-bold font-mono" style={{ color: "var(--text-primary)" }}>
-                      {d.capacity.toLocaleString()}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-sm text-right font-mono" style={{ color: "var(--text-secondary)" }}>
-                    {d.avg.toLocaleString()}
-                  </td>
-                  <td className="px-4 py-3 text-center">
-                    {d.premier > 0 ? (
-                      <span className="text-xs font-bold font-mono" style={{ color: "#3b82f6" }}>{d.premier}</span>
-                    ) : (
-                      <span className="text-xs" style={{ color: "var(--text-muted)" }}>—</span>
+              {filtered.slice(0, 100).map((d) => {
+                const isExpanded = expandedZip === d.zip;
+                return (
+                  <Fragment key={d.zip}>
+                    <tr
+                      className="table-row cursor-pointer"
+                      style={isExpanded ? { background: "var(--bg-secondary)" } : undefined}
+                      onClick={() => setExpandedZip(isExpanded ? null : d.zip)}
+                    >
+                      <td className="px-4 py-3 text-sm font-mono font-semibold" style={{ color: "var(--accent)" }}>
+                        <span className="inline-block mr-2 text-[10px] transition-transform" style={{ color: "var(--text-muted)", transform: isExpanded ? "rotate(90deg)" : "rotate(0deg)" }}>&#9654;</span>
+                        {d.zip}
+                      </td>
+                      <td className="px-4 py-3 text-xs" style={{ color: "var(--text-secondary)" }}>
+                        {d.county}
+                      </td>
+                      <td className="px-4 py-3 text-xs max-w-48 truncate" style={{ color: "var(--text-secondary)" }}>
+                        {d.citiesList}
+                      </td>
+                      <td className="px-4 py-3 text-sm text-right font-mono" style={{ color: "var(--text-primary)" }}>
+                        {d.count}
+                      </td>
+                      <td className="px-4 py-3 text-right">
+                        <span className="text-sm font-bold font-mono" style={{ color: "var(--text-primary)" }}>
+                          {d.capacity.toLocaleString()}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 text-sm text-right font-mono" style={{ color: "var(--text-secondary)" }}>
+                        {d.avg.toLocaleString()}
+                      </td>
+                      <td className="px-4 py-3 text-center">
+                        {d.premier > 0 ? (
+                          <span className="text-xs font-bold font-mono" style={{ color: "#3b82f6" }}>{d.premier}</span>
+                        ) : (
+                          <span className="text-xs" style={{ color: "var(--text-muted)" }}>—</span>
+                        )}
+                      </td>
+                      <td className="px-4 py-3 text-center">
+                        {d.vizient > 0 ? (
+                          <span className="text-xs font-bold font-mono" style={{ color: "#8b5cf6" }}>{d.vizient}</span>
+                        ) : (
+                          <span className="text-xs" style={{ color: "var(--text-muted)" }}>—</span>
+                        )}
+                      </td>
+                      <td className="px-4 py-3 w-40">
+                        <div className="capacity-bar-bg">
+                          <div className="capacity-bar-fill" style={{ width: `${(d.capacity / maxCap) * 100}%` }} />
+                        </div>
+                      </td>
+                    </tr>
+                    {isExpanded && (
+                      <tr>
+                        <td colSpan={9} style={{ padding: 0, background: "var(--bg-secondary)" }}>
+                          <div className="px-6 py-4" style={{ borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)" }}>
+                            <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--text-muted)" }}>
+                              {d.count} {d.count === 1 ? "Facility" : "Facilities"} in {d.zip}
+                            </p>
+                            <div className="grid gap-2">
+                              {d.facilities
+                                .sort((a, b) => b.capacity - a.capacity)
+                                .map((f) => (
+                                  <div
+                                    key={f.number}
+                                    className="flex items-center gap-4 px-4 py-3 rounded-lg"
+                                    style={{ background: "var(--bg-primary)", border: "1px solid var(--border)" }}
+                                  >
+                                    <div className="flex-1 min-w-0">
+                                      <p className="text-sm font-semibold truncate" style={{ color: "var(--text-primary)" }}>
+                                        {f.name}
+                                      </p>
+                                      <p className="text-xs truncate" style={{ color: "var(--text-muted)" }}>
+                                        {f.address}, {f.city}
+                                      </p>
+                                    </div>
+                                    <div className="text-right shrink-0">
+                                      <p className="text-sm font-bold font-mono" style={{ color: "var(--accent)" }}>
+                                        {f.capacity.toLocaleString()}
+                                      </p>
+                                      <p className="text-[10px] uppercase" style={{ color: "var(--text-muted)" }}>rooms</p>
+                                    </div>
+                                    <div className="text-right shrink-0 w-16">
+                                      {f.phone && f.phone !== "N/A" ? (
+                                        <p className="text-xs font-mono" style={{ color: "var(--text-secondary)" }}>{f.phone}</p>
+                                      ) : (
+                                        <p className="text-xs" style={{ color: "var(--text-muted)" }}>—</p>
+                                      )}
+                                    </div>
+                                    <div className="shrink-0 w-20 text-center">
+                                      {f.gpo && f.gpo !== "None" ? (
+                                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full" style={{
+                                          background: f.gpo.includes("Premier") && f.gpo.includes("Vizient") ? "rgba(139,92,246,0.15)" : f.gpo.includes("Premier") ? "rgba(59,130,246,0.15)" : "rgba(139,92,246,0.15)",
+                                          color: f.gpo.includes("Premier") && f.gpo.includes("Vizient") ? "#a78bfa" : f.gpo.includes("Premier") ? "#60a5fa" : "#a78bfa",
+                                        }}>
+                                          {f.gpo}
+                                        </span>
+                                      ) : (
+                                        <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>—</span>
+                                      )}
+                                    </div>
+                                  </div>
+                                ))}
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
                     )}
-                  </td>
-                  <td className="px-4 py-3 text-center">
-                    {d.vizient > 0 ? (
-                      <span className="text-xs font-bold font-mono" style={{ color: "#8b5cf6" }}>{d.vizient}</span>
-                    ) : (
-                      <span className="text-xs" style={{ color: "var(--text-muted)" }}>—</span>
-                    )}
-                  </td>
-                  <td className="px-4 py-3 w-40">
-                    <div className="capacity-bar-bg">
-                      <div className="capacity-bar-fill" style={{ width: `${(d.capacity / maxCap) * 100}%` }} />
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                  </Fragment>
+                );
+              })}
             </tbody>
           </table>
         </div>
