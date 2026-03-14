@@ -371,7 +371,100 @@ export default function Dashboard({ facilities, stats }: Props) {
         <p className="text-xs mb-5" style={{ color: "var(--text-muted)" }}>
           Top 10 facilities by room capacity
         </p>
-        <div className="overflow-x-auto">
+        {/* Mobile card layout */}
+        <div className="sm:hidden space-y-2">
+          {topFacilities.map((f, i) => {
+            const isExpanded = expandedId === f.number;
+            return (
+              <div
+                key={f.number}
+                className="rounded-lg cursor-pointer"
+                style={{ background: "var(--bg-secondary)", border: isExpanded ? "1px solid var(--accent-dim)" : "1px solid var(--border)" }}
+                onClick={() => setExpandedId(isExpanded ? null : f.number)}
+              >
+                <div className="flex items-center gap-3 p-3">
+                  <span className="text-sm font-mono font-bold w-5 text-center shrink-0" style={{ color: i < 3 ? "var(--accent)" : "var(--text-muted)" }}>
+                    {i + 1}
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <svg
+                        width="10" height="10" viewBox="0 0 24 24" fill="none"
+                        stroke="var(--text-muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                        className="flex-shrink-0 transition-transform"
+                        style={{ transform: isExpanded ? "rotate(90deg)" : "rotate(0deg)" }}
+                      >
+                        <polyline points="9 18 15 12 9 6" />
+                      </svg>
+                      <span className="text-sm font-medium truncate" style={{ color: "var(--text-primary)" }}>{f.name}</span>
+                    </div>
+                    <div className="flex items-center gap-2 mt-1 ml-[18px]">
+                      <span className="text-xs" style={{ color: "var(--text-secondary)" }}>{f.city}</span>
+                      <span className="text-xs" style={{ color: "var(--text-muted)" }}>&middot;</span>
+                      <span className="text-xs" style={{ color: "var(--text-secondary)" }}>{f.county}</span>
+                    </div>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <span className="text-sm font-bold font-mono" style={{ color: "var(--accent)" }}>
+                      {f.capacity.toLocaleString()}
+                    </span>
+                    <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>rooms</p>
+                  </div>
+                </div>
+                {isExpanded && (
+                  <div className="px-3 pb-3" style={{ borderTop: "1px solid var(--border)" }}>
+                    <div className="grid grid-cols-2 gap-3 pt-3">
+                      <div>
+                        <p className="text-[10px] uppercase tracking-wider" style={{ color: "var(--text-muted)" }}>Phone</p>
+                        <p className="text-xs font-medium mt-0.5" style={{ color: "var(--text-primary)" }}>
+                          {f.phone ? (
+                            <a href={`tel:${f.phone}`} className="detail-link" onClick={(e) => e.stopPropagation()}>
+                              {f.phone}
+                            </a>
+                          ) : "—"}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-[10px] uppercase tracking-wider" style={{ color: "var(--text-muted)" }}>Administrator</p>
+                        <p className="text-xs font-medium mt-0.5" style={{ color: "var(--text-primary)" }}>{f.administrator || "—"}</p>
+                      </div>
+                      <div>
+                        <p className="text-[10px] uppercase tracking-wider" style={{ color: "var(--text-muted)" }}>Licensee</p>
+                        <p className="text-xs font-medium mt-0.5" style={{ color: "var(--text-primary)" }}>{f.licensee || "—"}</p>
+                      </div>
+                      <div>
+                        <p className="text-[10px] uppercase tracking-wider" style={{ color: "var(--text-muted)" }}>GPO</p>
+                        <p className="text-xs font-medium mt-0.5">
+                          {f.gpo !== "None" ? (
+                            <span style={{
+                              color: f.gpo.includes("Premier") && f.gpo.includes("Vizient") ? "#06b6d4" : f.gpo.includes("Premier") ? "#3b82f6" : "#8b5cf6",
+                            }}>
+                              {f.gpo}
+                            </span>
+                          ) : (
+                            <span style={{ color: "var(--text-muted)" }}>—</span>
+                          )}
+                        </p>
+                      </div>
+                      <div className="col-span-2">
+                        <p className="text-[10px] uppercase tracking-wider" style={{ color: "var(--text-muted)" }}>Address</p>
+                        <p className="text-xs font-medium mt-0.5" style={{ color: "var(--text-primary)" }}>{f.address}, {f.city}, {f.state} {f.zip}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4 mt-2 pt-2" style={{ borderTop: "1px solid var(--border)" }}>
+                      <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>#{f.number}</span>
+                      <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>Zip: {f.zip}</span>
+                      <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>Licensed: {f.licenseDate || "—"}</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Desktop table layout */}
+        <div className="hidden sm:block overflow-x-auto">
           <table className="w-full text-left">
             <thead>
               <tr style={{ borderBottom: "1px solid var(--border)" }}>
