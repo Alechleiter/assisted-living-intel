@@ -446,7 +446,6 @@ select:focus {
 
 /* Theme toggle button */
 .theme-toggle {
-  display: flex;
   align-items: center;
   justify-content: center;
   width: 36px;

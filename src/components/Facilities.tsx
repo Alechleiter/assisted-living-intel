@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { Fragment, useState, useMemo, useCallback } from "react";
 import * as XLSX from "xlsx";
 import type { Facility } from "../app/page";
 
@@ -236,9 +236,8 @@ export default function Facilities({ facilities }: Props) {
                     : "badge-probation";
                 const isExpanded = expandedId === f.number;
                 return (
-                  <>
+                  <Fragment key={f.number}>
                     <tr
-                      key={f.number}
                       className={`table-row cursor-pointer ${isExpanded ? "expanded-row" : ""}`}
                       onClick={() => setExpandedId(isExpanded ? null : f.number)}
                     >
@@ -395,7 +394,7 @@ export default function Facilities({ facilities }: Props) {
                         </td>
                       </tr>
                     )}
-                  </>
+                  </Fragment>
                 );
               })}
             </tbody>

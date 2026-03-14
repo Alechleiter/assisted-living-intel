@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { Fragment, useState, useMemo } from "react";
 import type { Facility } from "../app/page";
 
 function Tip({ text, children }: { text: string; children: React.ReactNode }) {
@@ -402,9 +402,8 @@ export default function Dashboard({ facilities, stats }: Props) {
               {topFacilities.map((f, i) => {
                 const isExpanded = expandedId === f.number;
                 return (
-                  <>
+                  <Fragment key={f.number}>
                     <tr
-                      key={f.number}
                       className={`table-row cursor-pointer ${isExpanded ? "expanded-row" : ""}`}
                       onClick={() => setExpandedId(isExpanded ? null : f.number)}
                     >
@@ -526,7 +525,7 @@ export default function Dashboard({ facilities, stats }: Props) {
                         </td>
                       </tr>
                     )}
-                  </>
+                  </Fragment>
                 );
               })}
             </tbody>
