@@ -108,7 +108,7 @@ export default function BulkLookup({ facilities }: Props) {
   return (
     <div>
       {/* Input area */}
-      <div className="card p-5 mb-6">
+      <div className="card p-4 sm:p-5 mb-4 sm:mb-6">
         <p className="text-sm font-semibold mb-1" style={{ color: "var(--text-primary)" }}>
           Territory Zip Code Lookup
         </p>
@@ -159,28 +159,28 @@ export default function BulkLookup({ facilities }: Props) {
       {activeZips.length > 0 && (
         <>
           {/* Summary cards */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-            <div className="card p-5">
-              <p className="text-xs uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Zips Searched</p>
-              <p className="text-2xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--accent)" }}>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 mb-4 sm:mb-6">
+            <div className="card p-3 sm:p-5">
+              <p className="text-[10px] sm:text-xs uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Zips Searched</p>
+              <p className="text-xl sm:text-2xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--accent)" }}>
                 {totals.zipsSearched.toLocaleString()}
               </p>
             </div>
-            <div className="card p-5">
-              <p className="text-xs uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Zips with Sites</p>
-              <p className="text-2xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--accent)" }}>
+            <div className="card p-3 sm:p-5">
+              <p className="text-[10px] sm:text-xs uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Zips with Sites</p>
+              <p className="text-xl sm:text-2xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--accent)" }}>
                 {totals.zipsFound.toLocaleString()}
               </p>
             </div>
-            <div className="card p-5">
-              <p className="text-xs uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Facilities</p>
-              <p className="text-2xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--accent)" }}>
+            <div className="card p-3 sm:p-5">
+              <p className="text-[10px] sm:text-xs uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Facilities</p>
+              <p className="text-xl sm:text-2xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--accent)" }}>
                 {totals.facilities.toLocaleString()}
               </p>
             </div>
-            <div className="card p-5">
-              <p className="text-xs uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Total Rooms</p>
-              <p className="text-2xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--accent)" }}>
+            <div className="card p-3 sm:p-5">
+              <p className="text-[10px] sm:text-xs uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Total Rooms</p>
+              <p className="text-xl sm:text-2xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--accent)" }}>
                 {totals.capacity.toLocaleString()}
               </p>
             </div>

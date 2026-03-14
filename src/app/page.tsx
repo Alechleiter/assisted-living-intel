@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import facilitiesData from "../data/facilities.json";
 import Dashboard from "../components/Dashboard";
 import ZipCodes from "../components/ZipCodes";
@@ -36,7 +36,24 @@ type TabId = "dashboard" | "zipcodes" | "bulk" | "facilities";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<TabId>("dashboard");
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
   const facilities = facilitiesData as Facility[];
+
+  // Load saved theme on mount
+  useEffect(() => {
+    const saved = localStorage.getItem("theme") as "dark" | "light" | null;
+    if (saved) {
+      setTheme(saved);
+      document.documentElement.classList.toggle("light", saved === "light");
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const next = theme === "dark" ? "light" : "dark";
+    setTheme(next);
+    localStorage.setItem("theme", next);
+    document.documentElement.classList.toggle("light", next === "light");
+  };
 
   const stats = useMemo(() => {
     const total = facilities.length;
@@ -52,67 +69,118 @@ export default function Home() {
     <div className="relative min-h-screen" style={{ background: "var(--bg-primary)" }}>
       <div
         className="fixed inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse 80% 50% at 50% -20%, rgba(200,149,108,0.06), transparent 70%)",
-        }}
+        style={{ background: "var(--glow-bg)" }}
       />
 
       <header
         className="sticky top-0 z-40"
         style={{
-          background: "rgba(12, 15, 20, 0.85)",
+          background: "var(--header-bg)",
           backdropFilter: "blur(16px)",
           borderBottom: "1px solid var(--border)",
         }}
       >
-        <div className="max-w-[1440px] mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div
-              className="w-9 h-9 rounded-lg flex items-center justify-center"
-              style={{ background: "var(--accent-dim)", border: "1px solid var(--accent)" }}
+        <div className="header-inner max-w-[1440px] mx-auto px-6 py-4 flex items-center justify-between">
+          <div className="header-top flex items-center gap-4">
+            <div className="flex items-center gap-3">
+              <div
+                className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
+                style={{ background: "var(--accent-dim)", border: "1px solid var(--accent)" }}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                  <polyline points="9 22 9 12 15 12 15 22" />
+                </svg>
+              </div>
+              <div>
+                <h1 className="text-base sm:text-lg font-semibold tracking-tight" style={{ fontFamily: "var(--font-display)", color: "var(--text-primary)" }}>
+                  CA Assisted Living Intel
+                </h1>
+                <p className="text-[10px] sm:text-xs" style={{ color: "var(--text-muted)" }}>
+                  {stats.total.toLocaleString()} facilities &middot; {stats.totalCapacity.toLocaleString()} rooms &middot; 25+ rooms only
+                </p>
+              </div>
+            </div>
+
+            {/* Theme toggle - visible in header-top row on mobile */}
+            <button
+              onClick={toggleTheme}
+              className="theme-toggle md:hidden"
+              title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-                <polyline points="9 22 9 12 15 12 15 22" />
-              </svg>
-            </div>
-            <div>
-              <h1 className="text-lg font-semibold tracking-tight" style={{ fontFamily: "var(--font-display)", color: "var(--text-primary)" }}>
-                CA Assisted Living Intel
-              </h1>
-              <p className="text-xs" style={{ color: "var(--text-muted)" }}>
-                {stats.total.toLocaleString()} facilities &middot; {stats.totalCapacity.toLocaleString()} rooms &middot; 25+ rooms only
-              </p>
-            </div>
+              {theme === "dark" ? (
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="5" />
+                  <line x1="12" y1="1" x2="12" y2="3" />
+                  <line x1="12" y1="21" x2="12" y2="23" />
+                  <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                  <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                  <line x1="1" y1="12" x2="3" y2="12" />
+                  <line x1="21" y1="12" x2="23" y2="12" />
+                  <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                  <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                </svg>
+              ) : (
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+                </svg>
+              )}
+            </button>
           </div>
 
-          <nav className="flex items-center gap-1" style={{ background: "var(--bg-secondary)", borderRadius: 10, padding: 3 }}>
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`tab flex items-center gap-2 ${activeTab === tab.id ? "active" : ""}`}
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                  <path d={tab.icon} />
+          <div className="flex items-center gap-3">
+            <nav className="nav-tabs flex items-center gap-1" style={{ background: "var(--bg-secondary)", borderRadius: 10, padding: 3 }}>
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`tab flex items-center gap-2 ${activeTab === tab.id ? "active" : ""}`}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <path d={tab.icon} />
+                  </svg>
+                  <span className="hidden sm:inline">{tab.label}</span>
+                </button>
+              ))}
+            </nav>
+
+            {/* Theme toggle - desktop only */}
+            <button
+              onClick={toggleTheme}
+              className="theme-toggle hidden md:flex"
+              title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+            >
+              {theme === "dark" ? (
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="5" />
+                  <line x1="12" y1="1" x2="12" y2="3" />
+                  <line x1="12" y1="21" x2="12" y2="23" />
+                  <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                  <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                  <line x1="1" y1="12" x2="3" y2="12" />
+                  <line x1="21" y1="12" x2="23" y2="12" />
+                  <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                  <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
                 </svg>
-                <span className="hidden sm:inline">{tab.label}</span>
-              </button>
-            ))}
-          </nav>
+              ) : (
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+                </svg>
+              )}
+            </button>
+          </div>
         </div>
       </header>
 
-      <main className="relative z-10 max-w-[1440px] mx-auto px-6 py-8">
+      <main className="main-content relative z-10 max-w-[1440px] mx-auto px-4 sm:px-6 py-6 sm:py-8">
         {activeTab === "dashboard" && <Dashboard facilities={facilities} stats={stats} />}
         {activeTab === "zipcodes" && <ZipCodes facilities={facilities} />}
         {activeTab === "bulk" && <BulkLookup facilities={facilities} />}
         {activeTab === "facilities" && <Facilities facilities={facilities} />}
       </main>
 
-      <footer className="relative z-10 text-center py-8" style={{ borderTop: "1px solid var(--border)" }}>
-        <p className="text-xs" style={{ color: "var(--text-muted)" }}>
+      <footer className="footer-content relative z-10 text-center py-6 sm:py-8 px-4" style={{ borderTop: "1px solid var(--border)" }}>
+        <p className="text-[10px] sm:text-xs" style={{ color: "var(--text-muted)" }}>
           California RCFE Facility Data &middot; Sites with 25+ guest rooms only &middot; Source: CA Community Care Licensing &middot; 2025
         </p>
       </footer>

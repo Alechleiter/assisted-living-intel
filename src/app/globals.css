@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&display=swap');
 @import "tailwindcss";
 
+/* ── Dark theme (default) ───────────────────────── */
 :root {
   --bg-primary: #0c0f14;
   --bg-secondary: #141820;
@@ -21,6 +22,82 @@
   --info: #60a5fa;
   --font-display: 'Fraunces', Georgia, serif;
   --font-body: 'DM Sans', system-ui, sans-serif;
+  --header-bg: rgba(12, 15, 20, 0.85);
+  --tooltip-bg: #1e2533;
+  --shadow-tooltip: rgba(0, 0, 0, 0.4);
+  --noise-opacity: 0.025;
+  --glow-bg: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(200,149,108,0.06), transparent 70%);
+  --export-bg: rgba(34, 139, 34, 0.12);
+  --export-border: rgba(34, 139, 34, 0.25);
+  --export-color: #4ade80;
+  --export-hover-bg: rgba(34, 139, 34, 0.22);
+  --export-hover-border: rgba(74, 222, 128, 0.4);
+  --export-hover-color: #86efac;
+}
+
+/* ── Light theme ─────────────────────────────────── */
+.light {
+  --bg-primary: #f7f8fa;
+  --bg-secondary: #edf0f4;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f5f6f8;
+  --border: #dde1e8;
+  --border-light: #c8cdd6;
+  --text-primary: #1a1d23;
+  --text-secondary: #5c6678;
+  --text-muted: #8b95a8;
+  --accent: #a0724e;
+  --accent-light: #be8a5e;
+  --accent-dim: rgba(160, 114, 78, 0.10);
+  --accent-glow: rgba(160, 114, 78, 0.05);
+  --header-bg: rgba(247, 248, 250, 0.88);
+  --tooltip-bg: #ffffff;
+  --shadow-tooltip: rgba(0, 0, 0, 0.12);
+  --noise-opacity: 0.015;
+  --glow-bg: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(160,114,78,0.05), transparent 70%);
+  --export-bg: rgba(22, 163, 74, 0.08);
+  --export-border: rgba(22, 163, 74, 0.22);
+  --export-color: #16a34a;
+  --export-hover-bg: rgba(22, 163, 74, 0.15);
+  --export-hover-border: rgba(22, 163, 74, 0.35);
+  --export-hover-color: #15803d;
+}
+
+/* Light-mode overrides for hardcoded colors */
+.light .badge-licensed {
+  background: rgba(22, 163, 74, 0.10);
+  color: #15803d;
+  border-color: rgba(22, 163, 74, 0.22);
+}
+
+.light .badge-pending {
+  background: rgba(202, 138, 4, 0.10);
+  color: #a16207;
+  border-color: rgba(202, 138, 4, 0.22);
+}
+
+.light .badge-probation {
+  background: rgba(220, 38, 38, 0.10);
+  color: #dc2626;
+  border-color: rgba(220, 38, 38, 0.22);
+}
+
+.light .tooltip-bubble {
+  background: var(--tooltip-bg);
+  border-color: var(--border);
+  color: var(--text-primary);
+}
+
+.light .tooltip-bubble::after {
+  border-bottom-color: var(--border);
+}
+
+.light .tooltip-bubble::before {
+  border-bottom-color: var(--tooltip-bg);
+}
+
+.light .card {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
 @theme inline {
@@ -47,7 +124,7 @@ body::before {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.025;
+  opacity: var(--noise-opacity);
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 256px 256px;
@@ -277,7 +354,7 @@ body::before {
   top: calc(100% + 10px);
   left: 50%;
   transform: translateX(-50%) translateY(-4px);
-  background: #1e2533;
+  background: var(--tooltip-bg);
   color: var(--text-primary);
   font-size: 12px;
   font-weight: 400;
@@ -287,7 +364,7 @@ body::before {
   padding: 10px 14px;
   border-radius: 10px;
   border: 1px solid var(--border-light);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 24px var(--shadow-tooltip);
   width: max-content;
   max-width: 280px;
   white-space: normal;
@@ -315,7 +392,7 @@ body::before {
   left: 50%;
   transform: translateX(-50%);
   border: 5px solid transparent;
-  border-bottom-color: #1e2533;
+  border-bottom-color: var(--tooltip-bg);
   z-index: 1;
 }
 
@@ -331,9 +408,9 @@ body::before {
   align-items: center;
   gap: 6px;
   padding: 8px 14px;
-  background: rgba(34, 139, 34, 0.12);
-  color: #4ade80;
-  border: 1px solid rgba(34, 139, 34, 0.25);
+  background: var(--export-bg);
+  color: var(--export-color);
+  border: 1px solid var(--export-border);
   border-radius: 8px;
   font-size: 13px;
   font-weight: 600;
@@ -343,9 +420,9 @@ body::before {
 }
 
 .export-btn:hover {
-  background: rgba(34, 139, 34, 0.22);
-  border-color: rgba(74, 222, 128, 0.4);
-  color: #86efac;
+  background: var(--export-hover-bg);
+  border-color: var(--export-hover-border);
+  color: var(--export-hover-color);
 }
 
 .export-btn:active {
@@ -365,4 +442,198 @@ select {
 select:focus {
   outline: none;
   border-color: var(--accent);
+}
+
+/* Theme toggle button */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-dim);
+}
+
+/* ── Mobile-first responsive ─────────────────────── */
+
+/* Touch-friendly table scrolling */
+.overflow-x-auto {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Mobile: smaller padding, tighter spacing */
+@media (max-width: 767px) {
+  /* Header stacks vertically */
+  .header-inner {
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px 16px;
+  }
+
+  .header-top {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* Nav scrolls horizontally on mobile */
+  .nav-tabs {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .nav-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tab {
+    padding: 6px 14px;
+    font-size: 13px;
+  }
+
+  /* Tighter main padding */
+  .main-content {
+    padding: 16px;
+  }
+
+  /* Stat cards: 2 cols, compact */
+  .stat-card-grid {
+    gap: 8px;
+  }
+
+  .stat-card-grid .card {
+    padding: 12px;
+  }
+
+  .stat-card-grid .stat-value {
+    font-size: 1.25rem;
+  }
+
+  /* Filter bars stack vertically */
+  .filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .filter-bar .filter-controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .filter-bar .export-btn {
+    justify-content: center;
+    grid-column: span 2;
+  }
+
+  /* Table: horizontal scroll with gradient fade hint */
+  .table-container {
+    position: relative;
+  }
+
+  .table-container::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 24px;
+    pointer-events: none;
+    background: linear-gradient(to right, transparent, var(--bg-card));
+    z-index: 2;
+    opacity: 0.8;
+  }
+
+  /* Table cells: tighter */
+  table th, table td {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  /* Cards section */
+  .summary-cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .section-card {
+    padding: 16px;
+  }
+
+  /* Footer */
+  .footer-content {
+    padding: 16px;
+  }
+
+  /* ZipCodes summary: 3 cols compact */
+  .zip-summary-grid {
+    gap: 8px;
+  }
+
+  .zip-summary-grid .card {
+    padding: 12px;
+  }
+
+  /* Bulk lookup: compact textarea */
+  .bulk-textarea {
+    min-height: 60px;
+    font-size: 13px;
+  }
+
+  /* Mobile card layout for expanded details */
+  .detail-panel {
+    padding: 12px 4px;
+  }
+
+  .detail-panel .grid {
+    gap: 12px;
+  }
+
+  .detail-item {
+    gap: 8px;
+  }
+
+  .detail-icon {
+    width: 26px;
+    height: 26px;
+  }
+}
+
+/* Tablet */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .header-inner {
+    padding: 12px 20px;
+  }
+
+  .main-content {
+    padding: 20px;
+  }
+
+  .tab {
+    padding: 7px 16px;
+    font-size: 13px;
+  }
+}
+
+/* Large screens */
+@media (min-width: 1024px) {
+  .main-content {
+    padding: 32px 24px;
+  }
 }

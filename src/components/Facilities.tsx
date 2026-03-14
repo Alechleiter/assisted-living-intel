@@ -118,39 +118,39 @@ export default function Facilities({ facilities }: Props) {
   return (
     <div>
       {/* Summary */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <div className="card p-5">
-          <p className="text-xs uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Matched</p>
-          <p className="text-2xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--accent)" }}>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 mb-6">
+        <div className="card p-3 sm:p-5">
+          <p className="text-[10px] sm:text-xs uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Matched</p>
+          <p className="text-xl sm:text-2xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--accent)" }}>
             {filtered.length.toLocaleString()}
           </p>
-          <p className="text-xs" style={{ color: "var(--text-secondary)" }}>facilities</p>
+          <p className="text-[10px] sm:text-xs" style={{ color: "var(--text-secondary)" }}>facilities</p>
         </div>
-        <div className="card p-5">
-          <p className="text-xs uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Total Rooms</p>
-          <p className="text-2xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--accent)" }}>
+        <div className="card p-3 sm:p-5">
+          <p className="text-[10px] sm:text-xs uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Total Rooms</p>
+          <p className="text-xl sm:text-2xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--accent)" }}>
             {totalCap.toLocaleString()}
           </p>
-          <p className="text-xs" style={{ color: "var(--text-secondary)" }}>bed capacity</p>
+          <p className="text-[10px] sm:text-xs" style={{ color: "var(--text-secondary)" }}>bed capacity</p>
         </div>
-        <div className="card p-5">
-          <p className="text-xs uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Average</p>
-          <p className="text-2xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--accent)" }}>
+        <div className="card p-3 sm:p-5">
+          <p className="text-[10px] sm:text-xs uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Average</p>
+          <p className="text-xl sm:text-2xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--accent)" }}>
             {filtered.length ? Math.round(totalCap / filtered.length).toLocaleString() : 0}
           </p>
-          <p className="text-xs" style={{ color: "var(--text-secondary)" }}>rooms/facility</p>
+          <p className="text-[10px] sm:text-xs" style={{ color: "var(--text-secondary)" }}>rooms/facility</p>
         </div>
-        <div className="card p-5">
-          <p className="text-xs uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Largest</p>
-          <p className="text-2xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--accent)" }}>
+        <div className="card p-3 sm:p-5">
+          <p className="text-[10px] sm:text-xs uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Largest</p>
+          <p className="text-xl sm:text-2xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--accent)" }}>
             {filtered.length ? Math.max(...filtered.map((f) => f.capacity)).toLocaleString() : 0}
           </p>
-          <p className="text-xs" style={{ color: "var(--text-secondary)" }}>max rooms</p>
+          <p className="text-[10px] sm:text-xs" style={{ color: "var(--text-secondary)" }}>max rooms</p>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="flex flex-col md:flex-row items-start md:items-center gap-3 mb-6">
+      <div className="filter-bar flex flex-col md:flex-row items-start md:items-center gap-3 mb-6">
         <div className="relative flex-1 w-full">
           <svg className="absolute left-3 top-1/2 -translate-y-1/2" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="11" cy="11" r="8" />
@@ -164,7 +164,7 @@ export default function Facilities({ facilities }: Props) {
             onChange={(e) => { setSearch(e.target.value); setPage(0); }}
           />
         </div>
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="filter-controls grid grid-cols-2 sm:flex sm:items-center gap-2 w-full sm:w-auto">
           <select value={countyFilter} onChange={(e) => { setCountyFilter(e.target.value); setPage(0); }} className="text-sm">
             {counties.map((c) => (
               <option key={c} value={c}>{c === "ALL" ? "All Counties" : c}</option>
@@ -188,7 +188,7 @@ export default function Facilities({ facilities }: Props) {
             <option value="BOTH">Both GPOs</option>
             <option value="NONE">No GPO</option>
           </select>
-          <button onClick={exportToExcel} className="export-btn" title="Export current filtered results to Excel">
+          <button onClick={exportToExcel} className="export-btn col-span-2 sm:col-span-1 justify-center sm:justify-start" title="Export current filtered results to Excel">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
               <polyline points="7 10 12 15 17 10" />

@@ -126,29 +126,29 @@ export default function ZipCodes({ facilities }: Props) {
   return (
     <div>
       {/* Summary cards */}
-      <div className="grid grid-cols-3 gap-4 mb-6">
-        <div className="card p-5">
-          <p className="text-xs uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Zip Codes</p>
-          <p className="text-2xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--accent)" }}>
+      <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-6">
+        <div className="card p-3 sm:p-5">
+          <p className="text-[10px] sm:text-xs uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Zip Codes</p>
+          <p className="text-xl sm:text-2xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--accent)" }}>
             {totals.zips.toLocaleString()}
           </p>
         </div>
-        <div className="card p-5">
-          <p className="text-xs uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Facilities</p>
-          <p className="text-2xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--accent)" }}>
+        <div className="card p-3 sm:p-5">
+          <p className="text-[10px] sm:text-xs uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Facilities</p>
+          <p className="text-xl sm:text-2xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--accent)" }}>
             {totals.facilities.toLocaleString()}
           </p>
         </div>
-        <div className="card p-5">
-          <p className="text-xs uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Total Rooms</p>
-          <p className="text-2xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--accent)" }}>
+        <div className="card p-3 sm:p-5">
+          <p className="text-[10px] sm:text-xs uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Total Rooms</p>
+          <p className="text-xl sm:text-2xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--accent)" }}>
             {totals.capacity.toLocaleString()}
           </p>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 mb-6">
+      <div className="filter-bar flex flex-col sm:flex-row items-start sm:items-center gap-3 mb-6">
         <div className="relative flex-1 w-full">
           <svg className="absolute left-3 top-1/2 -translate-y-1/2" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="11" cy="11" r="8" />
@@ -162,25 +162,27 @@ export default function ZipCodes({ facilities }: Props) {
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
-        <select
-          value={countyFilter}
-          onChange={(e) => setCountyFilter(e.target.value)}
-          className="text-sm"
-        >
-          {counties.map((c) => (
-            <option key={c} value={c}>
-              {c === "ALL" ? "All Counties" : c}
-            </option>
-          ))}
-        </select>
-        <button onClick={exportToExcel} className="export-btn" title="Export current filtered results to Excel">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
-            <polyline points="7 10 12 15 17 10" />
-            <line x1="12" y1="15" x2="12" y2="3" />
-          </svg>
-          Export Excel
-        </button>
+        <div className="filter-controls flex items-center gap-2 w-full sm:w-auto">
+          <select
+            value={countyFilter}
+            onChange={(e) => setCountyFilter(e.target.value)}
+            className="text-sm flex-1 sm:flex-none"
+          >
+            {counties.map((c) => (
+              <option key={c} value={c}>
+                {c === "ALL" ? "All Counties" : c}
+              </option>
+            ))}
+          </select>
+          <button onClick={exportToExcel} className="export-btn" title="Export current filtered results to Excel">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            Export Excel
+          </button>
+        </div>
       </div>
 
       {/* Table */}
