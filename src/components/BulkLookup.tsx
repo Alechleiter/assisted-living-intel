@@ -16,6 +16,7 @@ export default function BulkLookup({ facilities }: Props) {
   const [activeZips, setActiveZips] = useState<string[]>([]);
   const [sortKey, setSortKey] = useState<SortKey>("zip");
   const [sortDir, setSortDir] = useState<SortDir>("asc");
+  const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const parseZips = (text: string): string[] => {
     return text
@@ -212,9 +213,101 @@ export default function BulkLookup({ facilities }: Props) {
             </div>
           )}
 
+          {/* Mobile card list */}
+          {matched.length > 0 && (
+            <div className="sm:hidden space-y-2">
+              {matched.map((f) => {
+                const isExpanded = expandedId === f.number;
+                return (
+                  <div key={f.number} className="rounded-lg cursor-pointer"
+                    style={{ background: "var(--bg-secondary)", border: isExpanded ? "1px solid var(--accent-dim)" : "1px solid var(--border)" }}
+                    onClick={() => setExpandedId(isExpanded ? null : f.number)}>
+                    <div className="flex items-center gap-3 p-3">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                            style={{ transform: isExpanded ? "rotate(90deg)" : "rotate(0deg)", transition: "transform 0.2s", flexShrink: 0 }}>
+                            <polyline points="9 18 15 12 9 6" />
+                          </svg>
+                          <span className="text-sm font-medium truncate" style={{ color: "var(--text-primary)" }}>{f.name}</span>
+                        </div>
+                        <div className="flex items-center gap-2 mt-1 ml-[18px]">
+                          <span className="text-xs" style={{ color: "var(--text-muted)" }}>
+                            {f.city} · {f.county} · {f.zip}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="text-right shrink-0">
+                        <span className="text-sm font-bold font-mono" style={{ color: "var(--accent)" }}>
+                          {f.capacity.toLocaleString()}
+                        </span>
+                        <div className="text-[10px]" style={{ color: "var(--text-muted)" }}>rooms</div>
+                      </div>
+                    </div>
+                    {isExpanded && (
+                      <div className="px-3 pb-3" style={{ borderTop: "1px solid var(--border)" }}>
+                        <div className="grid grid-cols-2 gap-3 pt-3">
+                          <div>
+                            <p className="text-[10px] uppercase tracking-wider mb-0.5" style={{ color: "var(--text-muted)" }}>Phone</p>
+                            {f.phone ? (
+                              <a href={`tel:${f.phone}`} className="detail-link text-xs font-mono" onClick={(e) => e.stopPropagation()}>{f.phone}</a>
+                            ) : (
+                              <p className="text-xs" style={{ color: "var(--text-secondary)" }}>—</p>
+                            )}
+                          </div>
+                          <div>
+                            <p className="text-[10px] uppercase tracking-wider mb-0.5" style={{ color: "var(--text-muted)" }}>Administrator</p>
+                            <p className="text-xs" style={{ color: "var(--text-secondary)" }}>{f.administrator || "—"}</p>
+                          </div>
+                          <div>
+                            <p className="text-[10px] uppercase tracking-wider mb-0.5" style={{ color: "var(--text-muted)" }}>Licensee</p>
+                            <p className="text-xs" style={{ color: "var(--text-secondary)" }}>{f.licensee || "—"}</p>
+                          </div>
+                          <div>
+                            <p className="text-[10px] uppercase tracking-wider mb-0.5" style={{ color: "var(--text-muted)" }}>GPO</p>
+                            {f.gpo !== "None" ? (
+                              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full" style={{
+                                background: f.gpo.includes("Premier") && f.gpo.includes("Vizient") ? "rgba(6,182,212,0.12)" : f.gpo.includes("Premier") ? "rgba(59,130,246,0.12)" : "rgba(139,92,246,0.12)",
+                                color: f.gpo.includes("Premier") && f.gpo.includes("Vizient") ? "#06b6d4" : f.gpo.includes("Premier") ? "#3b82f6" : "#8b5cf6",
+                              }}>
+                                {f.gpo}
+                              </span>
+                            ) : (
+                              <p className="text-xs" style={{ color: "var(--text-muted)" }}>—</p>
+                            )}
+                          </div>
+                          <div className="col-span-2">
+                            <p className="text-[10px] uppercase tracking-wider mb-0.5" style={{ color: "var(--text-muted)" }}>Address</p>
+                            <p className="text-xs" style={{ color: "var(--text-secondary)" }}>{f.address}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between mt-3 pt-2" style={{ borderTop: "1px solid var(--border)" }}>
+                          <span className="text-[10px] font-mono" style={{ color: "var(--text-muted)" }}>#{f.number}</span>
+                          <div className="flex items-center gap-2">
+                            <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${
+                              f.status === "LICENSED" ? "badge-licensed" : f.status === "PENDING" ? "badge-pending" : "badge-probation"
+                            }`}>
+                              {f.status}
+                            </span>
+                            <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>
+                              {f.type.includes("CONTINUING CARE") ? "CCRC" : "RCFE"}
+                            </span>
+                            {f.licenseDate && (
+                              <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>{f.licenseDate}</span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
           {/* Table */}
           {matched.length > 0 && (
-            <div className="card overflow-hidden">
+            <div className="card overflow-hidden hidden sm:block">
               <div className="overflow-x-auto">
                 <table className="w-full text-left">
                   <thead>

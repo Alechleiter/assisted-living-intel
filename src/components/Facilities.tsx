@@ -201,7 +201,128 @@ export default function Facilities({ facilities }: Props) {
 
       {/* Table */}
       <div className="card overflow-hidden">
-        <div className="overflow-x-auto">
+        {/* Mobile card list */}
+        <div className="sm:hidden divide-y" style={{ borderColor: "var(--border)" }}>
+          {paged.map((f) => {
+            const isExpanded = expandedId === f.number;
+            const badgeClass =
+              f.status === "LICENSED"
+                ? "badge-licensed"
+                : f.status === "PENDING"
+                ? "badge-pending"
+                : "badge-probation";
+            const gpoColor = f.gpo.includes("Premier") && f.gpo.includes("Vizient")
+              ? "#06b6d4"
+              : f.gpo.includes("Premier")
+              ? "#3b82f6"
+              : f.gpo.includes("Vizient")
+              ? "#8b5cf6"
+              : undefined;
+            const gpoBg = f.gpo.includes("Premier") && f.gpo.includes("Vizient")
+              ? "rgba(6,182,212,0.12)"
+              : f.gpo.includes("Premier")
+              ? "rgba(59,130,246,0.12)"
+              : f.gpo.includes("Vizient")
+              ? "rgba(139,92,246,0.12)"
+              : undefined;
+            const gpoBorder = f.gpo.includes("Premier") && f.gpo.includes("Vizient")
+              ? "rgba(6,182,212,0.25)"
+              : f.gpo.includes("Premier")
+              ? "rgba(59,130,246,0.25)"
+              : f.gpo.includes("Vizient")
+              ? "rgba(139,92,246,0.25)"
+              : undefined;
+            return (
+              <div
+                key={f.number}
+                className="cursor-pointer"
+                style={{ background: isExpanded ? "var(--bg-secondary)" : "transparent", borderBottom: "1px solid var(--border)" }}
+                onClick={() => setExpandedId(isExpanded ? null : f.number)}
+              >
+                <div className="flex items-center gap-3 p-3">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0 transition-transform" style={{ transform: isExpanded ? "rotate(90deg)" : "rotate(0deg)" }}>
+                        <polyline points="9 18 15 12 9 6" />
+                      </svg>
+                      <span className="text-sm font-medium truncate" style={{ color: "var(--text-primary)" }}>{f.name}</span>
+                    </div>
+                    <div className="text-[11px] mt-0.5 ml-[18px] truncate" style={{ color: "var(--text-muted)" }}>{f.address}</div>
+                    <div className="flex items-center gap-1 mt-1 ml-[18px] text-[11px]" style={{ color: "var(--text-secondary)" }}>
+                      <span>{f.city}</span>
+                      <span style={{ color: "var(--text-muted)" }}>&middot;</span>
+                      <span>{f.county}</span>
+                      <span style={{ color: "var(--text-muted)" }}>&middot;</span>
+                      <span className="font-mono">{f.zip}</span>
+                    </div>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <span className="text-sm font-bold font-mono" style={{ color: "var(--accent)" }}>{f.capacity.toLocaleString()}</span>
+                    <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>rooms</p>
+                  </div>
+                </div>
+                {isExpanded && (
+                  <div className="px-3 pb-3" style={{ borderTop: "1px solid var(--border)" }} onClick={(e) => e.stopPropagation()}>
+                    <div className="grid grid-cols-2 gap-3 pt-3">
+                      <div>
+                        <p className="text-[10px] uppercase tracking-wider" style={{ color: "var(--text-muted)" }}>Phone</p>
+                        <p className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>
+                          {f.phone ? (
+                            <a href={`tel:${f.phone}`} className="detail-link" onClick={(e) => e.stopPropagation()}>{f.phone}</a>
+                          ) : "—"}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-[10px] uppercase tracking-wider" style={{ color: "var(--text-muted)" }}>Administrator</p>
+                        <p className="text-sm font-medium truncate" style={{ color: "var(--text-primary)" }}>{f.administrator || "—"}</p>
+                      </div>
+                      <div>
+                        <p className="text-[10px] uppercase tracking-wider" style={{ color: "var(--text-muted)" }}>Licensee</p>
+                        <p className="text-sm font-medium truncate" style={{ color: "var(--text-primary)" }}>{f.licensee || "—"}</p>
+                      </div>
+                      <div>
+                        <p className="text-[10px] uppercase tracking-wider" style={{ color: "var(--text-muted)" }}>GPO</p>
+                        {f.gpo !== "None" && gpoColor ? (
+                          <span className="text-xs font-medium px-2 py-0.5 rounded-full inline-block mt-0.5" style={{
+                            background: gpoBg,
+                            color: gpoColor,
+                            border: `1px solid ${gpoBorder}`,
+                          }}>
+                            {f.gpo}
+                          </span>
+                        ) : (
+                          <p className="text-sm" style={{ color: "var(--text-muted)" }}>—</p>
+                        )}
+                      </div>
+                      <div className="col-span-2">
+                        <p className="text-[10px] uppercase tracking-wider" style={{ color: "var(--text-muted)" }}>Address</p>
+                        <p className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>{f.address}, {f.city}, {f.state} {f.zip}</p>
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-3 mt-2 pt-2" style={{ borderTop: "1px solid var(--border)" }}>
+                      <div className="flex items-center gap-1">
+                        <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>Facility #:</span>
+                        <span className="text-[11px] font-mono font-medium" style={{ color: "var(--text-secondary)" }}>{f.number}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>Type:</span>
+                        <span className="text-[11px] font-medium" style={{ color: "var(--text-secondary)" }}>{f.type.includes("CONTINUING CARE") ? "CCRC" : "RCFE"}</span>
+                      </div>
+                      <span className={`text-[11px] font-medium px-2 py-0.5 rounded-full ${badgeClass}`}>{f.status}</span>
+                      <div className="flex items-center gap-1">
+                        <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>Licensed:</span>
+                        <span className="text-[11px] font-medium" style={{ color: "var(--text-secondary)" }}>{f.licenseDate || "—"}</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Desktop table */}
+        <div className="overflow-x-auto hidden sm:block">
           <table className="w-full text-left">
             <thead>
               <tr style={{ background: "var(--bg-secondary)", borderBottom: "1px solid var(--border)" }}>
