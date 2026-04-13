@@ -250,7 +250,7 @@ export default function MapTab({ facilities }: { facilities: Facility[] }) {
             </div>
             <div>
               <span style={{ color: "var(--text-muted)", display: "block", marginBottom: 2 }}>Capacity</span>
-              <span style={{ color: "var(--accent)", fontWeight: 600 }}>{selected.capacity.toLocaleString()} rooms</span>
+              <span style={{ color: "var(--accent)", fontWeight: 600 }}>{selected.capacity.toLocaleString()} beds</span>
             </div>
             <div>
               <span style={{ color: "var(--text-muted)", display: "block", marginBottom: 2 }}>Status</span>

@@ -101,7 +101,7 @@ export default function Facilities({ facilities }: Props) {
       "Type": f.type.includes("CONTINUING CARE") ? "CCRC" : "RCFE",
       "Status": f.status,
       "GPO": f.gpo,
-      "Rooms": f.capacity,
+      "Beds": f.capacity,
       "License Date": f.licenseDate,
     }));
     const ws = XLSX.utils.json_to_sheet(rows);
@@ -127,7 +127,7 @@ export default function Facilities({ facilities }: Props) {
           <p className="text-[10px] sm:text-xs" style={{ color: "var(--text-secondary)" }}>facilities</p>
         </div>
         <div className="card p-3 sm:p-5">
-          <p className="text-[10px] sm:text-xs uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Total Rooms</p>
+          <p className="text-[10px] sm:text-xs uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Total Beds</p>
           <p className="text-xl sm:text-2xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--accent)" }}>
             {totalCap.toLocaleString()}
           </p>
@@ -138,14 +138,14 @@ export default function Facilities({ facilities }: Props) {
           <p className="text-xl sm:text-2xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--accent)" }}>
             {filtered.length ? Math.round(totalCap / filtered.length).toLocaleString() : 0}
           </p>
-          <p className="text-[10px] sm:text-xs" style={{ color: "var(--text-secondary)" }}>rooms/facility</p>
+          <p className="text-[10px] sm:text-xs" style={{ color: "var(--text-secondary)" }}>beds/facility</p>
         </div>
         <div className="card p-3 sm:p-5">
           <p className="text-[10px] sm:text-xs uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Largest</p>
           <p className="text-xl sm:text-2xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--accent)" }}>
             {filtered.length ? Math.max(...filtered.map((f) => f.capacity)).toLocaleString() : 0}
           </p>
-          <p className="text-[10px] sm:text-xs" style={{ color: "var(--text-secondary)" }}>max rooms</p>
+          <p className="text-[10px] sm:text-xs" style={{ color: "var(--text-secondary)" }}>max beds</p>
         </div>
       </div>
 
@@ -258,7 +258,7 @@ export default function Facilities({ facilities }: Props) {
                   </div>
                   <div className="text-right shrink-0">
                     <span className="text-sm font-bold font-mono" style={{ color: "var(--accent)" }}>{f.capacity.toLocaleString()}</span>
-                    <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>rooms</p>
+                    <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>beds</p>
                   </div>
                 </div>
                 {isExpanded && (
@@ -333,7 +333,7 @@ export default function Facilities({ facilities }: Props) {
                   { key: "zip" as SortKey, label: "Zip" },
                   { key: "status" as SortKey, label: "Status" },
                   { key: "gpo" as SortKey, label: "GPO" },
-                  { key: "capacity" as SortKey, label: "Rooms", align: "right" },
+                  { key: "capacity" as SortKey, label: "Beds", align: "right" },
                 ].map((col) => (
                   <th
                     key={col.key + col.label}
@@ -508,7 +508,7 @@ export default function Facilities({ facilities }: Props) {
                               </div>
                               <div className="flex items-center gap-2">
                                 <span className="text-xs" style={{ color: "var(--text-muted)" }}>Capacity:</span>
-                                <span className="text-xs font-bold" style={{ color: "var(--accent)" }}>{f.capacity} rooms</span>
+                                <span className="text-xs font-bold" style={{ color: "var(--accent)" }}>{f.capacity} beds</span>
                               </div>
                             </div>
                           </div>

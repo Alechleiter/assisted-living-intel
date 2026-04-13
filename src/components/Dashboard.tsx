@@ -138,11 +138,11 @@ export default function Dashboard({ facilities, stats }: Props) {
       {/* Stat Cards */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-4 mb-6 sm:mb-8">
         {[
-          { label: "Total Facilities", value: stats.total.toLocaleString(), sub: "statewide", delay: 1, tip: "Total assisted living sites (RCFEs) in California with 25 or more guest rooms. Includes both standard RCFE and CCRC facilities." },
-          { label: "Total Rooms", value: stats.totalCapacity.toLocaleString(), sub: "bed capacity", delay: 2, tip: "Combined room/bed capacity across all facilities with 25+ rooms. Each room represents one licensed resident bed." },
-          { label: "Avg Capacity", value: stats.avgCapacity.toLocaleString(), sub: "rooms/facility", delay: 3, tip: "Average number of rooms per facility. Only sites with 25 or more guest rooms are included in this app." },
+          { label: "Total Facilities", value: stats.total.toLocaleString(), sub: "statewide", delay: 1, tip: "Total assisted living sites (RCFEs) in California with 25 or more beds. Includes both standard RCFE and CCRC facilities." },
+          { label: "Total Beds", value: stats.totalCapacity.toLocaleString(), sub: "bed capacity", delay: 2, tip: "Combined bed capacity across all facilities with 25+ beds. Each bed represents one licensed resident bed." },
+          { label: "Avg Capacity", value: stats.avgCapacity.toLocaleString(), sub: "beds/facility", delay: 3, tip: "Average number of beds per facility. Only sites with 25 or more beds are included in this app." },
           { label: "Licensed", value: stats.licensed.toLocaleString(), sub: `${((stats.licensed / stats.total) * 100).toFixed(1)}% of total`, delay: 4, tip: "Facilities with an active license from CA Community Care Licensing. Others may be Pending or On Probation." },
-          { label: "Zip Codes", value: stats.uniqueZips.toLocaleString(), sub: "coverage areas", delay: 5, tip: "Unique zip codes with at least one assisted living facility of 25+ rooms." },
+          { label: "Zip Codes", value: stats.uniqueZips.toLocaleString(), sub: "coverage areas", delay: 5, tip: "Unique zip codes with at least one assisted living facility of 25+ beds." },
           { label: "Counties", value: stats.uniqueCounties.toLocaleString(), sub: "CA counties", delay: 6, tip: "California counties represented. CA has 58 total counties." },
         ].map((s) => (
           <div key={s.label} className={`card stat-glow p-3 sm:p-5 fade-up fade-up-${s.delay}`}>
@@ -164,7 +164,7 @@ export default function Dashboard({ facilities, stats }: Props) {
         {/* County Chart */}
         <div className="card p-4 sm:p-6 fade-up fade-up-7">
           <h3 className="text-sm font-semibold mb-1" style={{ color: "var(--text-primary)" }}>
-            <Tip text="Rooms = licensed bed capacity at each site. Sites = individual assisted living locations (25+ rooms only). Each bar shows the total rooms in that county.">Rooms by County</Tip>
+            <Tip text="Beds = licensed bed capacity at each site. Sites = individual assisted living locations (25+ beds only). Each bar shows the total beds in that county.">Beds by County</Tip>
           </h3>
           <p className="text-xs mb-5" style={{ color: "var(--text-muted)" }}>
             Top 12 counties by total facility capacity
@@ -191,7 +191,7 @@ export default function Dashboard({ facilities, stats }: Props) {
             ))}
           </div>
           <div className="flex justify-end gap-6 mt-3 text-xs" style={{ color: "var(--text-muted)" }}>
-            <span>Rooms</span>
+            <span>Beds</span>
             <span>Sites</span>
           </div>
         </div>
@@ -199,7 +199,7 @@ export default function Dashboard({ facilities, stats }: Props) {
         {/* Capacity Distribution */}
         <div className="card p-4 sm:p-6 fade-up fade-up-8">
           <h3 className="text-sm font-semibold mb-1" style={{ color: "var(--text-primary)" }}>
-            <Tip text="Shows how many facilities fall into each size range. This app only includes sites with 25 or more guest rooms.">Capacity Distribution</Tip>
+            <Tip text="Shows how many facilities fall into each size range. This app only includes sites with 25 or more beds.">Capacity Distribution</Tip>
           </h3>
           <p className="text-xs mb-5" style={{ color: "var(--text-muted)" }}>
             Number of facilities by room count range
@@ -220,7 +220,7 @@ export default function Dashboard({ facilities, stats }: Props) {
             ))}
           </div>
           <p className="text-xs text-center mt-3" style={{ color: "var(--text-muted)" }}>
-            Rooms per facility
+            Beds per facility
           </p>
         </div>
       </div>
@@ -246,7 +246,7 @@ export default function Dashboard({ facilities, stats }: Props) {
                 {g.count.toLocaleString()}
               </p>
               <p className="text-xs mt-1" style={{ color: "var(--text-muted)" }}>
-                {g.capacity.toLocaleString()} rooms &middot; {((g.count / stats.total) * 100).toFixed(1)}%
+                {g.capacity.toLocaleString()} beds &middot; {((g.count / stats.total) * 100).toFixed(1)}%
               </p>
             </div>
           ))}
@@ -284,7 +284,7 @@ export default function Dashboard({ facilities, stats }: Props) {
                       {t.count.toLocaleString()} facilities
                     </span>
                     <span className="text-xs" style={{ color: "var(--text-muted)" }}>
-                      {t.capacity.toLocaleString()} rooms
+                      {t.capacity.toLocaleString()} beds
                     </span>
                   </div>
                 </div>
@@ -337,7 +337,7 @@ export default function Dashboard({ facilities, stats }: Props) {
             <Tip text="Ranked by total room capacity across all assisted living sites in each city. Higher capacity cities represent larger markets for supplies and services.">Top Cities by Capacity</Tip>
           </h3>
           <p className="text-xs mb-5" style={{ color: "var(--text-muted)" }}>
-            Cities with the most assisted living rooms
+            Cities with the most assisted living beds
           </p>
           <div className="space-y-3">
             {cityData.map((c, i) => (
@@ -408,7 +408,7 @@ export default function Dashboard({ facilities, stats }: Props) {
                     <span className="text-sm font-bold font-mono" style={{ color: "var(--accent)" }}>
                       {f.capacity.toLocaleString()}
                     </span>
-                    <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>rooms</p>
+                    <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>beds</p>
                   </div>
                 </div>
                 {isExpanded && (
@@ -487,7 +487,7 @@ export default function Dashboard({ facilities, stats }: Props) {
                   GPO
                 </th>
                 <th className="text-xs font-medium uppercase tracking-wider pb-3 text-right" style={{ color: "var(--text-muted)" }}>
-                  Rooms
+                  Beds
                 </th>
               </tr>
             </thead>

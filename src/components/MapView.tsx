@@ -93,7 +93,7 @@ function buildPopupHTML(m: MapMarker): string {
       </div>
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px 12px;">
         <div><span style="color: #888;">County:</span> ${m.county}</div>
-        <div><span style="color: #888;">Capacity:</span> <strong>${m.capacity.toLocaleString()} rooms</strong></div>
+        <div><span style="color: #888;">Capacity:</span> <strong>${m.capacity.toLocaleString()} beds</strong></div>
         <div><span style="color: #888;">License:</span> #${m.number}</div>
         <div><span style="color: #888;">Since:</span> ${m.licenseDate}</div>
       </div>
@@ -176,7 +176,7 @@ export default function MapView({
       marker.bindTooltip(
         `<div style="font-family: 'DM Sans', sans-serif; font-size: 12px;">
           <strong>${m.name}</strong><br/>
-          ${m.city} &bull; ${m.capacity} rooms<br/>
+          ${m.city} &bull; ${m.capacity} beds<br/>
           ${m.gpo !== "None" ? m.gpo : m.status}
         </div>`,
         { direction: "top", offset: [0, -8] }

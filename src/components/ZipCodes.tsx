@@ -101,7 +101,7 @@ export default function ZipCodes({ facilities }: Props) {
             "Phone": f.phone || "",
             "Administrator": f.administrator || "",
             "Licensee": f.licensee || "",
-            "Rooms": f.capacity,
+            "Beds": f.capacity,
             "Type": f.type.includes("CONTINUING CARE") ? "CCRC" : "RCFE",
             "Status": f.status,
             "License Date": f.licenseDate || "",
@@ -140,7 +140,7 @@ export default function ZipCodes({ facilities }: Props) {
           </p>
         </div>
         <div className="card p-3 sm:p-5">
-          <p className="text-[10px] sm:text-xs uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Total Rooms</p>
+          <p className="text-[10px] sm:text-xs uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Total Beds</p>
           <p className="text-xl sm:text-2xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--accent)" }}>
             {totals.capacity.toLocaleString()}
           </p>
@@ -256,7 +256,7 @@ export default function ZipCodes({ facilities }: Props) {
                               <p className="text-base font-bold font-mono" style={{ color: "var(--accent)" }}>
                                 {f.capacity.toLocaleString()}
                               </p>
-                              <p className="text-[10px] uppercase" style={{ color: "var(--text-muted)" }}>rooms</p>
+                              <p className="text-[10px] uppercase" style={{ color: "var(--text-muted)" }}>beds</p>
                             </div>
                           </div>
                           <div className="grid grid-cols-2 gap-3">
@@ -349,8 +349,8 @@ export default function ZipCodes({ facilities }: Props) {
                     { key: "zip" as SortKey, label: "County", align: "left", noSort: true },
                     { key: "zip" as SortKey, label: "Cities", align: "left", noSort: true },
                     { key: "count" as SortKey, label: "Facilities", align: "right" },
-                    { key: "capacity" as SortKey, label: "Total Rooms", align: "right" },
-                    { key: "avg" as SortKey, label: "Avg Rooms", align: "right" },
+                    { key: "capacity" as SortKey, label: "Total Beds", align: "right" },
+                    { key: "avg" as SortKey, label: "Avg Beds", align: "right" },
                     { key: "zip" as SortKey, label: "Premier", align: "center", noSort: true },
                     { key: "zip" as SortKey, label: "Vizient", align: "center", noSort: true },
                     { key: "capacity" as SortKey, label: "Capacity", align: "left", noSort: true, isBar: true },
@@ -447,7 +447,7 @@ export default function ZipCodes({ facilities }: Props) {
                                           <p className="text-lg font-bold font-mono" style={{ color: "var(--accent)" }}>
                                             {f.capacity.toLocaleString()}
                                           </p>
-                                          <p className="text-[10px] uppercase" style={{ color: "var(--text-muted)" }}>rooms</p>
+                                          <p className="text-[10px] uppercase" style={{ color: "var(--text-muted)" }}>beds</p>
                                         </div>
                                       </div>
                                       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">

@@ -87,7 +87,7 @@ export default function BulkLookup({ facilities }: Props) {
       "Phone": f.phone || "",
       "Administrator": f.administrator || "",
       "Licensee": f.licensee || "",
-      "Rooms": f.capacity,
+      "Beds": f.capacity,
       "Type": f.type.includes("CONTINUING CARE") ? "CCRC" : "RCFE",
       "Status": f.status,
       "License Date": f.licenseDate || "",
@@ -180,7 +180,7 @@ export default function BulkLookup({ facilities }: Props) {
               </p>
             </div>
             <div className="card p-3 sm:p-5">
-              <p className="text-[10px] sm:text-xs uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Total Rooms</p>
+              <p className="text-[10px] sm:text-xs uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Total Beds</p>
               <p className="text-xl sm:text-2xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--accent)" }}>
                 {totals.capacity.toLocaleString()}
               </p>
@@ -191,7 +191,7 @@ export default function BulkLookup({ facilities }: Props) {
           {unmatchedZips.length > 0 && (
             <div className="card p-4 mb-6" style={{ borderColor: "rgba(234,179,8,0.3)" }}>
               <p className="text-xs font-semibold mb-1" style={{ color: "#eab308" }}>
-                {unmatchedZips.length} zip code{unmatchedZips.length > 1 ? "s" : ""} had no facilities (25+ rooms)
+                {unmatchedZips.length} zip code{unmatchedZips.length > 1 ? "s" : ""} had no facilities (25+ beds)
               </p>
               <p className="text-xs font-mono" style={{ color: "var(--text-muted)" }}>
                 {unmatchedZips.join(", ")}
@@ -241,7 +241,7 @@ export default function BulkLookup({ facilities }: Props) {
                         <span className="text-sm font-bold font-mono" style={{ color: "var(--accent)" }}>
                           {f.capacity.toLocaleString()}
                         </span>
-                        <div className="text-[10px]" style={{ color: "var(--text-muted)" }}>rooms</div>
+                        <div className="text-[10px]" style={{ color: "var(--text-muted)" }}>beds</div>
                       </div>
                     </div>
                     {isExpanded && (
@@ -322,7 +322,7 @@ export default function BulkLookup({ facilities }: Props) {
                         { key: "name" as SortKey, label: "Licensee", noSort: true },
                         { key: "name" as SortKey, label: "GPO", noSort: true },
                         { key: "name" as SortKey, label: "Status", noSort: true },
-                        { key: "capacity" as SortKey, label: "Rooms" },
+                        { key: "capacity" as SortKey, label: "Beds" },
                       ].map((col, i) => (
                         <th
                           key={i}
@@ -395,7 +395,7 @@ export default function BulkLookup({ facilities }: Props) {
           {matched.length === 0 && (
             <div className="card p-8 text-center">
               <p className="text-sm" style={{ color: "var(--text-muted)" }}>
-                No facilities with 25+ rooms found in the provided zip codes.
+                No facilities with 25+ beds found in the provided zip codes.
               </p>
             </div>
           )}
