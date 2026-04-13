@@ -465,6 +465,66 @@ select:focus {
   background: var(--accent-dim);
 }
 
+/* ── Leaflet map popup styling ────────────────────── */
+.leaflet-container {
+  font-family: var(--font-body);
+  background: var(--bg-primary);
+}
+
+.facility-popup .leaflet-popup-content-wrapper {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  padding: 0;
+}
+
+.facility-popup .leaflet-popup-content {
+  margin: 14px 16px;
+  line-height: 1.5;
+}
+
+.facility-popup .leaflet-popup-tip {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-left: none;
+}
+
+.facility-popup .leaflet-popup-close-button {
+  color: var(--text-muted) !important;
+  font-size: 20px !important;
+  padding: 6px 8px !important;
+  width: auto !important;
+  height: auto !important;
+}
+
+.facility-popup .leaflet-popup-close-button:hover {
+  color: var(--accent) !important;
+}
+
+.facility-popup a {
+  color: var(--accent);
+}
+
+.facility-popup a:hover {
+  color: var(--accent-light);
+}
+
+.leaflet-tooltip {
+  background: var(--bg-card) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+  padding: 8px 12px !important;
+}
+
+.leaflet-tooltip-top::before {
+  border-top-color: var(--border) !important;
+}
+
 /* ── Mobile-first responsive ─────────────────────── */
 
 /* Touch-friendly table scrolling */
