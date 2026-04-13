@@ -35,6 +35,7 @@ const OPERATORS = [
   ["Welltower", "WELLTOWER"],
   ["Covenant Living", "COVENANT"],
   ["Sequoia Living", "SEQUOIA"],
+  ["Savant Senior Living", "SAVANT"],
 ];
 
 const facilities = JSON.parse(readFileSync(FACILITIES_PATH, "utf-8"));
