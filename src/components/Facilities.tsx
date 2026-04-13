@@ -17,6 +17,7 @@ export default function Facilities({ facilities }: Props) {
   const [statusFilter, setStatusFilter] = useState("ALL");
   const [typeFilter, setTypeFilter] = useState("ALL");
   const [gpoFilter, setGpoFilter] = useState("ALL");
+  const [operatorFilter, setOperatorFilter] = useState("ALL");
   const [sortKey, setSortKey] = useState<SortKey>("capacity");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
   const [page, setPage] = useState(0);
@@ -25,6 +26,11 @@ export default function Facilities({ facilities }: Props) {
 
   const counties = useMemo(
     () => ["ALL", ...Array.from(new Set(facilities.map((f) => f.county))).sort()],
+    [facilities]
+  );
+
+  const operators = useMemo(
+    () => ["ALL", ...Array.from(new Set(facilities.map((f) => f.parentCompany).filter((p) => p !== "Independent"))).sort()],
     [facilities]
   );
 
@@ -41,6 +47,10 @@ export default function Facilities({ facilities }: Props) {
       else if (gpoFilter === "VIZIENT") data = data.filter((f) => f.gpo.includes("Vizient"));
       else if (gpoFilter === "BOTH") data = data.filter((f) => f.gpo === "Premier, Vizient");
       else if (gpoFilter === "NONE") data = data.filter((f) => f.gpo === "None");
+    }
+    if (operatorFilter !== "ALL") {
+      if (operatorFilter === "INDEPENDENT") data = data.filter((f) => f.parentCompany === "Independent");
+      else data = data.filter((f) => f.parentCompany === operatorFilter);
     }
     if (search) {
       const q = search.toLowerCase();
@@ -63,7 +73,7 @@ export default function Facilities({ facilities }: Props) {
       return mul * av.localeCompare(bv);
     });
     return data;
-  }, [facilities, search, countyFilter, statusFilter, typeFilter, gpoFilter, sortKey, sortDir]);
+  }, [facilities, search, countyFilter, statusFilter, typeFilter, gpoFilter, operatorFilter, sortKey, sortDir]);
 
   const totalPages = Math.ceil(filtered.length / perPage);
   const paged = filtered.slice(page * perPage, (page + 1) * perPage);
@@ -187,6 +197,13 @@ export default function Facilities({ facilities }: Props) {
             <option value="VIZIENT">Vizient</option>
             <option value="BOTH">Both GPOs</option>
             <option value="NONE">No GPO</option>
+          </select>
+          <select value={operatorFilter} onChange={(e) => { setOperatorFilter(e.target.value); setPage(0); }} className="text-sm">
+            <option value="ALL">All Operators</option>
+            <option value="INDEPENDENT">Independent</option>
+            {operators.filter((o) => o !== "ALL").map((o) => (
+              <option key={o} value={o}>{o}</option>
+            ))}
           </select>
           <button onClick={exportToExcel} className="export-btn col-span-2 sm:col-span-1 justify-center sm:justify-start" title="Export current filtered results to Excel">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

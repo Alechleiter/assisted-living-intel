@@ -37,6 +37,7 @@ export default function MapTab({ facilities }: { facilities: Facility[] }) {
   const [status, setStatus] = useState("");
   const [gpo, setGpo] = useState("");
   const [facilityType, setFacilityType] = useState("");
+  const [operator, setOperator] = useState("");
   const [zipInput, setZipInput] = useState("");
   const [zipChips, setZipChips] = useState<string[]>([]);
   const [showZipInput, setShowZipInput] = useState(false);
@@ -53,6 +54,11 @@ export default function MapTab({ facilities }: { facilities: Facility[] }) {
 
   const typeOptions = useMemo(
     () => [...new Set(facilities.map((f) => f.type))].sort(),
+    [facilities]
+  );
+
+  const operatorOptions = useMemo(
+    () => [...new Set(facilities.map((f) => f.parentCompany).filter((p) => p !== "Independent"))].sort(),
     [facilities]
   );
 
@@ -76,6 +82,10 @@ export default function MapTab({ facilities }: { facilities: Facility[] }) {
         if (status && f.status !== status) return false;
         if (gpo && f.gpo !== gpo) return false;
         if (facilityType && f.type !== facilityType) return false;
+        if (operator) {
+          if (operator === "INDEPENDENT" && f.parentCompany !== "Independent") return false;
+          if (operator !== "INDEPENDENT" && f.parentCompany !== operator) return false;
+        }
         if (zipChips.length > 0 && !zipChips.includes(f.zip)) return false;
         return true;
       })
@@ -83,7 +93,7 @@ export default function MapTab({ facilities }: { facilities: Facility[] }) {
         const fAny = f as Facility & { lat: number; lng: number };
         return { ...f, lat: fAny.lat, lng: fAny.lng };
       });
-  }, [facilities, county, status, gpo, facilityType, zipChips]);
+  }, [facilities, county, status, gpo, facilityType, operator, zipChips]);
 
   const handleMarkerClick = useCallback((m: MapMarker) => setSelected(m), []);
 
@@ -145,6 +155,13 @@ export default function MapTab({ facilities }: { facilities: Facility[] }) {
             <option value="">All Types</option>
             {typeOptions.map((t) => (
               <option key={t} value={t}>{t === "RCFE-CONTINUING CARE RETIREMENT COMMUNITY" ? "CCRC" : "RCFE"}</option>
+            ))}
+          </select>
+          <select value={operator} onChange={(e) => setOperator(e.target.value)} style={selectStyle}>
+            <option value="">All Operators</option>
+            <option value="INDEPENDENT">Independent</option>
+            {operatorOptions.map((o) => (
+              <option key={o} value={o}>{o}</option>
             ))}
           </select>
           <button

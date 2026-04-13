@@ -127,6 +127,36 @@ export default function Dashboard({ facilities, stats }: Props) {
 
   const maxBucket = Math.max(...capacityBuckets.map((b) => b.count));
 
+  // Top 20 parent company operators
+  const operatorData = useMemo(() => {
+    const map: Record<string, { name: string; sites: Facility[]; beds: number; counties: Set<string>; cities: Set<string>; gpos: { premier: number; vizient: number; both: number; none: number } }> = {};
+    facilities.forEach((f) => {
+      const pc = f.parentCompany || "Independent";
+      if (pc === "Independent") return;
+      if (!map[pc]) map[pc] = { name: pc, sites: [], beds: 0, counties: new Set(), cities: new Set(), gpos: { premier: 0, vizient: 0, both: 0, none: 0 } };
+      map[pc].sites.push(f);
+      map[pc].beds += f.capacity;
+      map[pc].counties.add(f.county);
+      map[pc].cities.add(f.city);
+      if (f.gpo === "Premier, Vizient") map[pc].gpos.both++;
+      else if (f.gpo === "Premier") map[pc].gpos.premier++;
+      else if (f.gpo === "Vizient") map[pc].gpos.vizient++;
+      else map[pc].gpos.none++;
+    });
+    return Object.values(map)
+      .map((g) => ({ ...g, countyCount: g.counties.size, cityCount: g.cities.size, sites: g.sites.sort((a, b) => b.capacity - a.capacity) }))
+      .sort((a, b) => b.sites.length - a.sites.length)
+      .slice(0, 20);
+  }, [facilities]);
+
+  const [expandedOperator, setExpandedOperator] = useState<string | null>(null);
+  const [operatorSort, setOperatorSort] = useState<"sites" | "beds">("sites");
+  const sortedOperators = useMemo(() => {
+    if (operatorSort === "beds") return [...operatorData].sort((a, b) => b.beds - a.beds);
+    return operatorData;
+  }, [operatorData, operatorSort]);
+  const maxOperatorSites = Math.max(...operatorData.map((o) => o.sites.length));
+
   // Top 10 largest facilities
   const topFacilities = useMemo(
     () => [...facilities].sort((a, b) => b.capacity - a.capacity).slice(0, 10),
@@ -360,6 +390,178 @@ export default function Dashboard({ facilities, stats }: Props) {
               </div>
             ))}
           </div>
+        </div>
+      </div>
+
+      {/* Top 20 Operators */}
+      <div className="card p-4 sm:p-6">
+        <div className="flex items-center justify-between mb-1">
+          <h3 className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>
+            <Tip text="The 20 largest assisted living operators in California by portfolio size. Each operator may own facilities under dozens of different LLCs. Click to expand and see all sites.">Top 20 Operators</Tip>
+          </h3>
+          <div className="flex items-center gap-1" style={{ background: "var(--bg-secondary)", borderRadius: 6, padding: 2 }}>
+            {(["sites", "beds"] as const).map((s) => (
+              <button
+                key={s}
+                onClick={() => setOperatorSort(s)}
+                className="text-[10px] font-medium px-2.5 py-1 rounded"
+                style={{
+                  background: operatorSort === s ? "var(--accent-dim)" : "transparent",
+                  color: operatorSort === s ? "var(--accent)" : "var(--text-muted)",
+                  cursor: "pointer",
+                  border: "none",
+                  fontFamily: "var(--font-body)",
+                }}
+              >
+                {s === "sites" ? "By Sites" : "By Beds"}
+              </button>
+            ))}
+          </div>
+        </div>
+        <p className="text-xs mb-5" style={{ color: "var(--text-muted)" }}>
+          Click any operator to see all facilities in their portfolio
+        </p>
+        <div className="space-y-2">
+          {sortedOperators.map((op, i) => {
+            const isExpanded = expandedOperator === op.name;
+            const gpoTotal = op.gpos.premier + op.gpos.vizient + op.gpos.both;
+            const gpoPct = Math.round((gpoTotal / op.sites.length) * 100);
+            return (
+              <div key={op.name}>
+                <div
+                  className="rounded-lg cursor-pointer transition-all"
+                  style={{
+                    background: isExpanded ? "var(--accent-glow)" : "var(--bg-secondary)",
+                    border: isExpanded ? "1px solid var(--accent)" : "1px solid transparent",
+                    padding: "10px 14px",
+                  }}
+                  onClick={() => setExpandedOperator(isExpanded ? null : op.name)}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <span
+                        className="text-xs font-mono w-5 text-center shrink-0"
+                        style={{ color: i < 3 ? "var(--accent)" : "var(--text-muted)" }}
+                      >
+                        {i + 1}
+                      </span>
+                      <svg
+                        width="10" height="10" viewBox="0 0 24 24" fill="none"
+                        stroke="var(--text-muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                        className="flex-shrink-0 transition-transform"
+                        style={{ transform: isExpanded ? "rotate(90deg)" : "rotate(0deg)" }}
+                      >
+                        <polyline points="9 18 15 12 9 6" />
+                      </svg>
+                      <span className="text-sm font-semibold truncate" style={{ color: "var(--text-primary)" }}>
+                        {op.name}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-4 shrink-0 ml-3">
+                      <div className="text-right hidden sm:block">
+                        <span className="text-[10px] uppercase tracking-wider" style={{ color: "var(--text-muted)" }}>Sites</span>
+                        <p className="text-sm font-bold font-mono" style={{ color: "var(--accent)" }}>{op.sites.length}</p>
+                      </div>
+                      <div className="text-right hidden sm:block">
+                        <span className="text-[10px] uppercase tracking-wider" style={{ color: "var(--text-muted)" }}>Beds</span>
+                        <p className="text-sm font-bold font-mono" style={{ color: "var(--text-primary)" }}>{op.beds.toLocaleString()}</p>
+                      </div>
+                      <div className="text-right hidden sm:block">
+                        <span className="text-[10px] uppercase tracking-wider" style={{ color: "var(--text-muted)" }}>Counties</span>
+                        <p className="text-sm font-mono" style={{ color: "var(--text-secondary)" }}>{op.countyCount}</p>
+                      </div>
+                      <div className="text-right hidden sm:block">
+                        <span className="text-[10px] uppercase tracking-wider" style={{ color: "var(--text-muted)" }}>GPO</span>
+                        <p className="text-sm font-mono" style={{ color: gpoPct > 50 ? "#4ade80" : gpoPct > 0 ? "var(--text-secondary)" : "var(--text-muted)" }}>{gpoPct}%</p>
+                      </div>
+                      {/* Mobile compact stats */}
+                      <div className="sm:hidden text-right">
+                        <span className="text-sm font-bold font-mono" style={{ color: "var(--accent)" }}>{op.sites.length}</span>
+                        <span className="text-[10px] ml-1" style={{ color: "var(--text-muted)" }}>sites</span>
+                      </div>
+                    </div>
+                  </div>
+                  {/* Progress bar showing relative size */}
+                  <div className="mt-2 ml-8 sm:ml-[52px]">
+                    <div style={{ background: "var(--bg-primary)", borderRadius: 3, height: 4, overflow: "hidden" }}>
+                      <div style={{
+                        width: `${(op.sites.length / maxOperatorSites) * 100}%`,
+                        height: "100%",
+                        background: "linear-gradient(90deg, var(--accent), var(--accent-light))",
+                        borderRadius: 3,
+                        transition: "width 0.4s ease",
+                      }} />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Expanded: all sites in this operator */}
+                {isExpanded && (
+                  <div
+                    className="mt-1 rounded-lg overflow-hidden"
+                    style={{ border: "1px solid var(--border)", background: "var(--bg-card)" }}
+                  >
+                    {/* Summary bar */}
+                    <div className="px-4 py-3 flex flex-wrap gap-4 text-xs" style={{ background: "var(--bg-secondary)", borderBottom: "1px solid var(--border)" }}>
+                      <span><strong style={{ color: "var(--accent)" }}>{op.sites.length}</strong> <span style={{ color: "var(--text-muted)" }}>sites</span></span>
+                      <span><strong style={{ color: "var(--text-primary)" }}>{op.beds.toLocaleString()}</strong> <span style={{ color: "var(--text-muted)" }}>beds</span></span>
+                      <span><strong style={{ color: "var(--text-primary)" }}>{op.countyCount}</strong> <span style={{ color: "var(--text-muted)" }}>counties</span></span>
+                      <span><strong style={{ color: "var(--text-primary)" }}>{op.cityCount}</strong> <span style={{ color: "var(--text-muted)" }}>cities</span></span>
+                      <span><strong style={{ color: "var(--text-primary)" }}>{Math.round(op.beds / op.sites.length)}</strong> <span style={{ color: "var(--text-muted)" }}>avg beds</span></span>
+                      {gpoTotal > 0 && (
+                        <span>
+                          <strong style={{ color: "#4ade80" }}>{gpoTotal}</strong>
+                          <span style={{ color: "var(--text-muted)" }}> GPO-affiliated ({gpoPct}%)</span>
+                        </span>
+                      )}
+                    </div>
+                    {/* Site list */}
+                    <div style={{ maxHeight: 400, overflowY: "auto" }}>
+                      {op.sites.map((f, si) => (
+                        <div
+                          key={f.number}
+                          className="flex items-center justify-between px-4 py-2.5 transition-colors"
+                          style={{
+                            borderBottom: si < op.sites.length - 1 ? "1px solid var(--border)" : "none",
+                            background: si % 2 === 0 ? "transparent" : "var(--bg-secondary)",
+                          }}
+                        >
+                          <div className="min-w-0 flex-1 mr-3">
+                            <p className="text-xs font-medium truncate" style={{ color: "var(--text-primary)" }}>{f.name}</p>
+                            <div className="flex items-center gap-2 mt-0.5">
+                              <span className="text-[10px]" style={{ color: "var(--text-secondary)" }}>{f.city}</span>
+                              <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>&middot;</span>
+                              <span className="text-[10px]" style={{ color: "var(--text-secondary)" }}>{f.county}</span>
+                              {f.phone && (
+                                <>
+                                  <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>&middot;</span>
+                                  <a href={`tel:${f.phone}`} className="text-[10px] detail-link" onClick={(e) => e.stopPropagation()}>{f.phone}</a>
+                                </>
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-3 shrink-0">
+                            {f.gpo !== "None" && (
+                              <span className="text-[10px] font-medium px-1.5 py-0.5 rounded" style={{
+                                background: f.gpo.includes("Premier") && f.gpo.includes("Vizient") ? "rgba(6,182,212,0.12)" : f.gpo.includes("Premier") ? "rgba(59,130,246,0.12)" : "rgba(139,92,246,0.12)",
+                                color: f.gpo.includes("Premier") && f.gpo.includes("Vizient") ? "#06b6d4" : f.gpo.includes("Premier") ? "#3b82f6" : "#8b5cf6",
+                              }}>
+                                {f.gpo}
+                              </span>
+                            )}
+                            <div className="text-right">
+                              <span className="text-xs font-bold font-mono" style={{ color: "var(--accent)" }}>{f.capacity.toLocaleString()}</span>
+                              <span className="text-[10px] ml-0.5" style={{ color: "var(--text-muted)" }}>beds</span>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
 

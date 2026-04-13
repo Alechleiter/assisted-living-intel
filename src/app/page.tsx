@@ -24,6 +24,7 @@ export type Facility = {
   status: string;
   licenseDate: string;
   gpo: string;
+  parentCompany: string;
 };
 
 const tabs = [
