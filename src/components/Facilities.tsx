@@ -18,6 +18,7 @@ export default function Facilities({ facilities }: Props) {
   const [typeFilter, setTypeFilter] = useState("ALL");
   const [gpoFilter, setGpoFilter] = useState("ALL");
   const [operatorFilter, setOperatorFilter] = useState("ALL");
+  const [sizeFilter, setSizeFilter] = useState("ALL");
   const [sortKey, setSortKey] = useState<SortKey>("capacity");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
   const [page, setPage] = useState(0);
@@ -52,6 +53,16 @@ export default function Facilities({ facilities }: Props) {
       if (operatorFilter === "INDEPENDENT") data = data.filter((f) => f.parentCompany === "Independent");
       else data = data.filter((f) => f.parentCompany === operatorFilter);
     }
+    if (sizeFilter !== "ALL") {
+      if (sizeFilter === "1-6") data = data.filter((f) => f.capacity >= 1 && f.capacity <= 6);
+      else if (sizeFilter === "7-15") data = data.filter((f) => f.capacity >= 7 && f.capacity <= 15);
+      else if (sizeFilter === "16-49") data = data.filter((f) => f.capacity >= 16 && f.capacity <= 49);
+      else if (sizeFilter === "50-99") data = data.filter((f) => f.capacity >= 50 && f.capacity <= 99);
+      else if (sizeFilter === "100-199") data = data.filter((f) => f.capacity >= 100 && f.capacity <= 199);
+      else if (sizeFilter === "200-499") data = data.filter((f) => f.capacity >= 200 && f.capacity <= 499);
+      else if (sizeFilter === "500+") data = data.filter((f) => f.capacity >= 500);
+      else if (sizeFilter === "25+") data = data.filter((f) => f.capacity >= 25);
+    }
     if (search) {
       const q = search.toLowerCase();
       data = data.filter(
@@ -73,7 +84,7 @@ export default function Facilities({ facilities }: Props) {
       return mul * av.localeCompare(bv);
     });
     return data;
-  }, [facilities, search, countyFilter, statusFilter, typeFilter, gpoFilter, operatorFilter, sortKey, sortDir]);
+  }, [facilities, search, countyFilter, statusFilter, typeFilter, gpoFilter, operatorFilter, sizeFilter, sortKey, sortDir]);
 
   const totalPages = Math.ceil(filtered.length / perPage);
   const paged = filtered.slice(page * perPage, (page + 1) * perPage);
@@ -204,6 +215,17 @@ export default function Facilities({ facilities }: Props) {
             {operators.filter((o) => o !== "ALL").map((o) => (
               <option key={o} value={o}>{o}</option>
             ))}
+          </select>
+          <select value={sizeFilter} onChange={(e) => { setSizeFilter(e.target.value); setPage(0); }} className="text-sm">
+            <option value="ALL">All Sizes</option>
+            <option value="25+">25+ Beds</option>
+            <option value="1-6">1-6 Beds</option>
+            <option value="7-15">7-15 Beds</option>
+            <option value="16-49">16-49 Beds</option>
+            <option value="50-99">50-99 Beds</option>
+            <option value="100-199">100-199 Beds</option>
+            <option value="200-499">200-499 Beds</option>
+            <option value="500+">500+ Beds</option>
           </select>
           <button onClick={exportToExcel} className="export-btn col-span-2 sm:col-span-1 justify-center sm:justify-start" title="Export current filtered results to Excel">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

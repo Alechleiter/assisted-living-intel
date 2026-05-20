@@ -168,11 +168,11 @@ export default function Dashboard({ facilities, stats }: Props) {
       {/* Stat Cards */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-4 mb-6 sm:mb-8">
         {[
-          { label: "Total Facilities", value: stats.total.toLocaleString(), sub: "statewide", delay: 1, tip: "Total assisted living sites (RCFEs) in California with 25 or more beds. Includes both standard RCFE and CCRC facilities." },
-          { label: "Total Beds", value: stats.totalCapacity.toLocaleString(), sub: "bed capacity", delay: 2, tip: "Combined bed capacity across all facilities with 25+ beds. Each bed represents one licensed resident bed." },
-          { label: "Avg Capacity", value: stats.avgCapacity.toLocaleString(), sub: "beds/facility", delay: 3, tip: "Average number of beds per facility. Only sites with 25 or more beds are included in this app." },
+          { label: "Total Facilities", value: stats.total.toLocaleString(), sub: "statewide", delay: 1, tip: "Total assisted living sites (RCFEs) in California across all sizes. Includes both standard RCFE and CCRC facilities." },
+          { label: "Total Beds", value: stats.totalCapacity.toLocaleString(), sub: "bed capacity", delay: 2, tip: "Combined bed capacity across all facilities. Each bed represents one licensed resident bed." },
+          { label: "Avg Capacity", value: stats.avgCapacity.toLocaleString(), sub: "beds/facility", delay: 3, tip: "Average number of beds per facility across all sizes. Use size filters on the Facilities tab to narrow by bed count." },
           { label: "Licensed", value: stats.licensed.toLocaleString(), sub: `${((stats.licensed / stats.total) * 100).toFixed(1)}% of total`, delay: 4, tip: "Facilities with an active license from CA Community Care Licensing. Others may be Pending or On Probation." },
-          { label: "Zip Codes", value: stats.uniqueZips.toLocaleString(), sub: "coverage areas", delay: 5, tip: "Unique zip codes with at least one assisted living facility of 25+ beds." },
+          { label: "Zip Codes", value: stats.uniqueZips.toLocaleString(), sub: "coverage areas", delay: 5, tip: "Unique zip codes with at least one assisted living facility." },
           { label: "Counties", value: stats.uniqueCounties.toLocaleString(), sub: "CA counties", delay: 6, tip: "California counties represented. CA has 58 total counties." },
         ].map((s) => (
           <div key={s.label} className={`card stat-glow p-3 sm:p-5 fade-up fade-up-${s.delay}`}>
@@ -194,7 +194,7 @@ export default function Dashboard({ facilities, stats }: Props) {
         {/* County Chart */}
         <div className="card p-4 sm:p-6 fade-up fade-up-7">
           <h3 className="text-sm font-semibold mb-1" style={{ color: "var(--text-primary)" }}>
-            <Tip text="Beds = licensed bed capacity at each site. Sites = individual assisted living locations (25+ beds only). Each bar shows the total beds in that county.">Beds by County</Tip>
+            <Tip text="Beds = licensed bed capacity at each site. Sites = individual assisted living locations. Each bar shows the total beds in that county.">Beds by County</Tip>
           </h3>
           <p className="text-xs mb-5" style={{ color: "var(--text-muted)" }}>
             Top 12 counties by total facility capacity
@@ -229,7 +229,7 @@ export default function Dashboard({ facilities, stats }: Props) {
         {/* Capacity Distribution */}
         <div className="card p-4 sm:p-6 fade-up fade-up-8">
           <h3 className="text-sm font-semibold mb-1" style={{ color: "var(--text-primary)" }}>
-            <Tip text="Shows how many facilities fall into each size range. This app only includes sites with 25 or more beds.">Capacity Distribution</Tip>
+            <Tip text="Shows how many facilities fall into each size range across all licensed sizes.">Capacity Distribution</Tip>
           </h3>
           <p className="text-xs mb-5" style={{ color: "var(--text-muted)" }}>
             Number of facilities by room count range

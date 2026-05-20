@@ -191,7 +191,7 @@ export default function BulkLookup({ facilities }: Props) {
           {unmatchedZips.length > 0 && (
             <div className="card p-4 mb-6" style={{ borderColor: "rgba(234,179,8,0.3)" }}>
               <p className="text-xs font-semibold mb-1" style={{ color: "#eab308" }}>
-                {unmatchedZips.length} zip code{unmatchedZips.length > 1 ? "s" : ""} had no facilities (25+ beds)
+                {unmatchedZips.length} zip code{unmatchedZips.length > 1 ? "s" : ""} had no facilities
               </p>
               <p className="text-xs font-mono" style={{ color: "var(--text-muted)" }}>
                 {unmatchedZips.join(", ")}
@@ -395,7 +395,7 @@ export default function BulkLookup({ facilities }: Props) {
           {matched.length === 0 && (
             <div className="card p-8 text-center">
               <p className="text-sm" style={{ color: "var(--text-muted)" }}>
-                No facilities with 25+ beds found in the provided zip codes.
+                No facilities found in the provided zip codes.
               </p>
             </div>
           )}
