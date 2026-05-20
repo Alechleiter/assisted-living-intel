@@ -55,8 +55,8 @@
     "status": "LICENSED",
     "licenseDate": "6/19/2019",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 33.519741,
+    "lng": -117.630298,
     "parentCompany": "Independent"
   },
   {
@@ -175,8 +175,8 @@
     "status": "LICENSED",
     "licenseDate": "12/23/2019",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 32.71742,
+    "lng": -117.162772,
     "parentCompany": "Independent"
   },
   {
@@ -395,8 +395,8 @@
     "status": "LICENSED",
     "licenseDate": "9/24/2007",
     "gpo": "Vizient",
-    "lat": null,
-    "lng": null,
+    "lat": 34.229872,
+    "lng": -118.881454,
     "parentCompany": "Independent"
   },
   {
@@ -535,8 +535,8 @@
     "status": "LICENSED",
     "licenseDate": "12/22/1992",
     "gpo": "Premier",
-    "lat": null,
-    "lng": null,
+    "lat": 37.23648,
+    "lng": -121.944187,
     "parentCompany": "HumanGood"
   },
   {
@@ -755,8 +755,8 @@
     "status": "LICENSED",
     "licenseDate": "11/3/2023",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 38.645187,
+    "lng": -122.871502,
     "parentCompany": "Independent"
   },
   {
@@ -775,8 +775,8 @@
     "status": "PENDING",
     "licenseDate": "",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 35.24229,
+    "lng": -120.677186,
     "parentCompany": "Independent"
   },
   {
@@ -1315,8 +1315,8 @@
     "status": "LICENSED",
     "licenseDate": "6/7/2023",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 33.598323,
+    "lng": -117.716767,
     "parentCompany": "Oakmont Management Group"
   },
   {
@@ -1615,8 +1615,8 @@
     "status": "LICENSED",
     "licenseDate": "10/1/2024",
     "gpo": "Premier",
-    "lat": null,
-    "lng": null,
+    "lat": 33.979025,
+    "lng": -118.411756,
     "parentCompany": "Independent"
   },
   {
@@ -2075,8 +2075,8 @@
     "status": "LICENSED",
     "licenseDate": "10/1/2023",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 33.74987,
+    "lng": -116.343713,
     "parentCompany": "Oakmont Management Group"
   },
   {
@@ -2855,8 +2855,8 @@
     "status": "LICENSED",
     "licenseDate": "7/21/2022",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 32.840162,
+    "lng": -117.274078,
     "parentCompany": "Belmont Village"
   },
   {
@@ -3135,8 +3135,8 @@
     "status": "LICENSED",
     "licenseDate": "4/4/2022",
     "gpo": "Vizient",
-    "lat": null,
-    "lng": null,
+    "lat": 38.571692,
+    "lng": -121.435862,
     "parentCompany": "Oakmont Management Group"
   },
   {
@@ -3175,8 +3175,8 @@
     "status": "LICENSED",
     "licenseDate": "8/4/2023",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 40.609417,
+    "lng": -122.373982,
     "parentCompany": "Independent"
   },
   {
@@ -3455,8 +3455,8 @@
     "status": "LICENSED",
     "licenseDate": "7/1/2023",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 33.907558,
+    "lng": -117.847181,
     "parentCompany": "Oakmont Management Group"
   },
   {
@@ -4755,8 +4755,8 @@
     "status": "LICENSED",
     "licenseDate": "2/22/2019",
     "gpo": "Vizient",
-    "lat": null,
-    "lng": null,
+    "lat": 33.562354,
+    "lng": -117.726858,
     "parentCompany": "Belmont Village"
   },
   {
@@ -5015,8 +5015,8 @@
     "status": "LICENSED",
     "licenseDate": "1/13/2025",
     "gpo": "Vizient",
-    "lat": null,
-    "lng": null,
+    "lat": 37.764802,
+    "lng": -121.954439,
     "parentCompany": "Belmont Village"
   },
   {
@@ -5175,8 +5175,8 @@
     "status": "LICENSED",
     "licenseDate": "11/1/2024",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 37.667492,
+    "lng": -122.060141,
     "parentCompany": "Integral Senior Living"
   },
   {
@@ -5795,8 +5795,8 @@
     "status": "LICENSED",
     "licenseDate": "10/9/2017",
     "gpo": "Premier, Vizient",
-    "lat": null,
-    "lng": null,
+    "lat": 37.285211,
+    "lng": -121.949625,
     "parentCompany": "Merrill Gardens"
   },
   {
@@ -5915,8 +5915,8 @@
     "status": "LICENSED",
     "licenseDate": "10/7/2020",
     "gpo": "Premier",
-    "lat": null,
-    "lng": null,
+    "lat": 33.249791,
+    "lng": -117.266801,
     "parentCompany": "Independent"
   },
   {
@@ -6035,8 +6035,8 @@
     "status": "LICENSED",
     "licenseDate": "7/1/2020",
     "gpo": "Premier",
-    "lat": null,
-    "lng": null,
+    "lat": 36.971141,
+    "lng": -120.101201,
     "parentCompany": "Cogir Management"
   },
   {
@@ -6435,8 +6435,8 @@
     "status": "LICENSED",
     "licenseDate": "8/13/2021",
     "gpo": "Vizient",
-    "lat": null,
-    "lng": null,
+    "lat": 33.183214,
+    "lng": -117.220766,
     "parentCompany": "Oakmont Management Group"
   },
   {
@@ -6555,8 +6555,8 @@
     "status": "PENDING",
     "licenseDate": "",
     "gpo": "Vizient",
-    "lat": null,
-    "lng": null,
+    "lat": 38.334175,
+    "lng": -121.96867,
     "parentCompany": "Independent"
   },
   {
@@ -7075,8 +7075,8 @@
     "status": "LICENSED",
     "licenseDate": "1/26/2023",
     "gpo": "Vizient",
-    "lat": null,
-    "lng": null,
+    "lat": 33.870822,
+    "lng": -117.929416,
     "parentCompany": "Oakmont Management Group"
   },
   {
@@ -7255,8 +7255,8 @@
     "status": "LICENSED",
     "licenseDate": "6/1/2013",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 33.76856,
+    "lng": -118.375874,
     "parentCompany": "Belmont Village"
   },
   {
@@ -7455,8 +7455,8 @@
     "status": "LICENSED",
     "licenseDate": "3/16/1990",
     "gpo": "Vizient",
-    "lat": null,
-    "lng": null,
+    "lat": 37.924792,
+    "lng": -121.297251,
     "parentCompany": "Independent"
   },
   {
@@ -7475,8 +7475,8 @@
     "status": "PENDING",
     "licenseDate": "",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 37.23648,
+    "lng": -121.944187,
     "parentCompany": "Independent"
   },
   {
@@ -7755,8 +7755,8 @@
     "status": "LICENSED",
     "licenseDate": "3/5/2020",
     "gpo": "Vizient",
-    "lat": null,
-    "lng": null,
+    "lat": 36.330228,
+    "lng": -119.292058,
     "parentCompany": "Independent"
   },
   {
@@ -7815,8 +7815,8 @@
     "status": "LICENSED",
     "licenseDate": "6/2/2022",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 34.103611,
+    "lng": -118.045784,
     "parentCompany": "Independent"
   },
   {
@@ -8715,8 +8715,8 @@
     "status": "LICENSED",
     "licenseDate": "6/25/1999",
     "gpo": "Vizient",
-    "lat": null,
-    "lng": null,
+    "lat": 34.228694,
+    "lng": -119.065825,
     "parentCompany": "Atria Senior Living"
   },
   {
@@ -8755,8 +8755,8 @@
     "status": "LICENSED",
     "licenseDate": "7/14/2005",
     "gpo": "Premier, Vizient",
-    "lat": null,
-    "lng": null,
+    "lat": 33.817289,
+    "lng": -117.984595,
     "parentCompany": "Brookdale Senior Living"
   },
   {
@@ -8975,8 +8975,8 @@
     "status": "PENDING",
     "licenseDate": "",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 33.817289,
+    "lng": -117.984595,
     "parentCompany": "Integral Senior Living"
   },
   {
@@ -9475,8 +9475,8 @@
     "status": "LICENSED",
     "licenseDate": "4/8/2024",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 33.218224,
+    "lng": -117.300677,
     "parentCompany": "Sunrise Senior Living"
   },
   {
@@ -9775,8 +9775,8 @@
     "status": "LICENSED",
     "licenseDate": "7/11/2019",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 33.839829,
+    "lng": -118.384594,
     "parentCompany": "Independent"
   },
   {
@@ -9895,8 +9895,8 @@
     "status": "LICENSED",
     "licenseDate": "2/16/2018",
     "gpo": "Premier, Vizient",
-    "lat": null,
-    "lng": null,
+    "lat": 37.996394,
+    "lng": -121.806301,
     "parentCompany": "Independent"
   },
   {
@@ -10095,8 +10095,8 @@
     "status": "LICENSED",
     "licenseDate": "2/1/2019",
     "gpo": "Premier",
-    "lat": null,
-    "lng": null,
+    "lat": 35.608874,
+    "lng": -120.6588,
     "parentCompany": "Welltower"
   },
   {
@@ -10335,8 +10335,8 @@
     "status": "LICENSED",
     "licenseDate": "8/28/2024",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 33.447605,
+    "lng": -117.630885,
     "parentCompany": "Independent"
   },
   {
@@ -10895,8 +10895,8 @@
     "status": "LICENSED",
     "licenseDate": "12/16/2019",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 38.581061,
+    "lng": -121.493895,
     "parentCompany": "Independent"
   },
   {
@@ -11035,8 +11035,8 @@
     "status": "LICENSED",
     "licenseDate": "2/1/2023",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 33.913814,
+    "lng": -117.175868,
     "parentCompany": "Independent"
   },
   {
@@ -11255,8 +11255,8 @@
     "status": "LICENSED",
     "licenseDate": "4/10/2019",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 33.167368,
+    "lng": -117.26619,
     "parentCompany": "NorthStar Senior Living"
   },
   {
@@ -11455,8 +11455,8 @@
     "status": "LICENSED",
     "licenseDate": "9/27/2021",
     "gpo": "Vizient",
-    "lat": null,
-    "lng": null,
+    "lat": 34.428597,
+    "lng": -118.552331,
     "parentCompany": "Oakmont Management Group"
   },
   {
@@ -12615,8 +12615,8 @@
     "status": "LICENSED",
     "licenseDate": "2/1/2019",
     "gpo": "Premier",
-    "lat": null,
-    "lng": null,
+    "lat": 34.698106,
+    "lng": -118.136615,
     "parentCompany": "Welltower"
   },
   {
@@ -13075,8 +13075,8 @@
     "status": "LICENSED",
     "licenseDate": "8/13/2021",
     "gpo": "Vizient",
-    "lat": null,
-    "lng": null,
+    "lat": 33.694388,
+    "lng": -117.993061,
     "parentCompany": "Oakmont Management Group"
   },
   {
@@ -13215,8 +13215,8 @@
     "status": "LICENSED",
     "licenseDate": "3/19/2014",
     "gpo": "Premier, Vizient",
-    "lat": null,
-    "lng": null,
+    "lat": 37.776397,
+    "lng": -121.996978,
     "parentCompany": "Brookdale Senior Living"
   },
   {
@@ -13895,8 +13895,8 @@
     "status": "LICENSED",
     "licenseDate": "2/23/2015",
     "gpo": "Vizient",
-    "lat": null,
-    "lng": null,
+    "lat": 32.662739,
+    "lng": -116.9703,
     "parentCompany": "Independent"
   },
   {
@@ -14135,8 +14135,8 @@
     "status": "LICENSED",
     "licenseDate": "5/3/2021",
     "gpo": "Vizient",
-    "lat": null,
-    "lng": null,
+    "lat": 38.631684,
+    "lng": -121.3282,
     "parentCompany": "Oakmont Management Group"
   },
   {
@@ -14295,8 +14295,8 @@
     "status": "LICENSED",
     "licenseDate": "11/13/2019",
     "gpo": "Premier",
-    "lat": null,
-    "lng": null,
+    "lat": 38.826403,
+    "lng": -121.293316,
     "parentCompany": "Independent"
   },
   {
@@ -14375,8 +14375,8 @@
     "status": "LICENSED",
     "licenseDate": "11/22/2023",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 34.048064,
+    "lng": -118.526471,
     "parentCompany": "Independent"
   },
   {
@@ -15155,8 +15155,8 @@
     "status": "LICENSED",
     "licenseDate": "10/14/2024",
     "gpo": "Premier",
-    "lat": null,
-    "lng": null,
+    "lat": 34.502036,
+    "lng": -117.303045,
     "parentCompany": "Independent"
   },
   {
@@ -15955,8 +15955,8 @@
     "status": "LICENSED",
     "licenseDate": "12/21/2017",
     "gpo": "Vizient",
-    "lat": null,
-    "lng": null,
+    "lat": 38.334175,
+    "lng": -121.96867,
     "parentCompany": "NorthStar Senior Living"
   },
   {
@@ -16195,8 +16195,8 @@
     "status": "LICENSED",
     "licenseDate": "10/2/2013",
     "gpo": "Premier",
-    "lat": null,
-    "lng": null,
+    "lat": 40.508435,
+    "lng": -122.31488,
     "parentCompany": "Independent"
   },
   {
@@ -16575,8 +16575,8 @@
     "status": "LICENSED",
     "licenseDate": "11/24/2020",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 33.522859,
+    "lng": -117.628167,
     "parentCompany": "Independent"
   },
   {
@@ -16835,8 +16835,8 @@
     "status": "LICENSED",
     "licenseDate": "5/1/1998",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 39.503304,
+    "lng": -121.539845,
     "parentCompany": "Integral Senior Living"
   },
   {
@@ -16855,8 +16855,8 @@
     "status": "PENDING",
     "licenseDate": "",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 39.503304,
+    "lng": -121.539845,
     "parentCompany": "Integral Senior Living"
   },
   {
@@ -16955,8 +16955,8 @@
     "status": "LICENSED",
     "licenseDate": "1/18/1991",
     "gpo": "Premier",
-    "lat": null,
-    "lng": null,
+    "lat": 33.904786,
+    "lng": -118.116655,
     "parentCompany": "Independent"
   },
   {
@@ -17515,8 +17515,8 @@
     "status": "LICENSED",
     "licenseDate": "8/2/2010",
     "gpo": "Premier",
-    "lat": null,
-    "lng": null,
+    "lat": 34.058193,
+    "lng": -118.462711,
     "parentCompany": "Independent"
   },
   {
@@ -17915,8 +17915,8 @@
     "status": "LICENSED",
     "licenseDate": "8/13/2021",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 37.982563,
+    "lng": -121.354567,
     "parentCompany": "Oakmont Management Group"
   },
   {
@@ -17935,8 +17935,8 @@
     "status": "LICENSED",
     "licenseDate": "11/4/2011",
     "gpo": "Vizient",
-    "lat": null,
-    "lng": null,
+    "lat": 33.125727,
+    "lng": -117.255313,
     "parentCompany": "Independent"
   },
   {
@@ -18755,8 +18755,8 @@
     "status": "LICENSED",
     "licenseDate": "1/19/2022",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 33.454053,
+    "lng": -117.660442,
     "parentCompany": "Aegis Senior Communities"
   },
   {
@@ -19135,8 +19135,8 @@
     "status": "LICENSED",
     "licenseDate": "10/3/2012",
     "gpo": "Premier",
-    "lat": null,
-    "lng": null,
+    "lat": 38.725551,
+    "lng": -120.780218,
     "parentCompany": "Independent"
   },
   {
@@ -19475,8 +19475,8 @@
     "status": "LICENSED",
     "licenseDate": "12/15/2017",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 37.708674,
+    "lng": -121.050049,
     "parentCompany": "Independent"
   },
   {
@@ -20075,8 +20075,8 @@
     "status": "LICENSED",
     "licenseDate": "7/25/2016",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 32.678109,
+    "lng": -117.099197,
     "parentCompany": "Independent"
   },
   {
@@ -20435,8 +20435,8 @@
     "status": "LICENSED",
     "licenseDate": "8/10/2021",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 32.71742,
+    "lng": -117.162772,
     "parentCompany": "Independent"
   },
   {
@@ -20455,8 +20455,8 @@
     "status": "LICENSED",
     "licenseDate": "5/7/2021",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 33.808913,
+    "lng": -118.361104,
     "parentCompany": "Independent"
   },
   {
@@ -20475,8 +20475,8 @@
     "status": "PENDING",
     "licenseDate": "",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 33.808913,
+    "lng": -118.361104,
     "parentCompany": "Independent"
   },
   {
@@ -21195,8 +21195,8 @@
     "status": "LICENSED",
     "licenseDate": "1/16/2020",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 36.830033,
+    "lng": -119.844478,
     "parentCompany": "NorthStar Senior Living"
   },
   {
@@ -21295,8 +21295,8 @@
     "status": "LICENSED",
     "licenseDate": "3/28/2008",
     "gpo": "Premier",
-    "lat": null,
-    "lng": null,
+    "lat": 34.229872,
+    "lng": -118.881454,
     "parentCompany": "Independent"
   },
   {
@@ -22315,8 +22315,8 @@
     "status": "LICENSED",
     "licenseDate": "11/28/2023",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 37.494657,
+    "lng": -120.846594,
     "parentCompany": "Independent"
   },
   {
@@ -22795,8 +22795,8 @@
     "status": "LICENSED",
     "licenseDate": "4/10/2018",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 34.427816,
+    "lng": -119.714707,
     "parentCompany": "Integral Senior Living"
   },
   {
@@ -23175,8 +23175,8 @@
     "status": "LICENSED",
     "licenseDate": "7/10/2003",
     "gpo": "Premier",
-    "lat": null,
-    "lng": null,
+    "lat": 39.149003,
+    "lng": -121.629752,
     "parentCompany": "Independent"
   },
   {
@@ -24055,8 +24055,8 @@
     "status": "LICENSED",
     "licenseDate": "12/1/2005",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 37.06944,
+    "lng": -121.593216,
     "parentCompany": "Independent"
   },
   {
@@ -24075,8 +24075,8 @@
     "status": "LICENSED",
     "licenseDate": "4/7/2014",
     "gpo": "Vizient",
-    "lat": null,
-    "lng": null,
+    "lat": 37.641259,
+    "lng": -121.882357,
     "parentCompany": "Independent"
   },
   {
@@ -24415,8 +24415,8 @@
     "status": "LICENSED",
     "licenseDate": "8/14/2024",
     "gpo": "Premier",
-    "lat": null,
-    "lng": null,
+    "lat": 38.583603,
+    "lng": -121.526517,
     "parentCompany": "Independent"
   },
   {
@@ -25035,8 +25035,8 @@
     "status": "LICENSED",
     "licenseDate": "12/20/2024",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 36.972033,
+    "lng": -121.994346,
     "parentCompany": "Independent"
   },
   {
@@ -25835,8 +25835,8 @@
     "status": "LICENSED",
     "licenseDate": "4/3/2023",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 38.476832,
+    "lng": -122.895367,
     "parentCompany": "Independent"
   },
   {
@@ -26735,8 +26735,8 @@
     "status": "LICENSED",
     "licenseDate": "10/3/2019",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 34.143148,
+    "lng": -117.979292,
     "parentCompany": "Independent"
   },
   {
@@ -26775,8 +26775,8 @@
     "status": "LICENSED",
     "licenseDate": "6/8/2017",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 34.143148,
+    "lng": -117.979253,
     "parentCompany": "Independent"
   },
   {
@@ -26875,8 +26875,8 @@
     "status": "LICENSED",
     "licenseDate": "8/30/2016",
     "gpo": "None",
-    "lat": null,
-    "lng": null,
+    "lat": 33.826943,
+    "lng": -117.958959,
     "parentCompany": "Independent"
   },
   {
