@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useState, useMemo } from "react";
+import { Fragment, useState, useMemo, useEffect, useRef } from "react";
 import type { Facility } from "../app/page";
 
 function Tip({ text, children }: { text: string; children: React.ReactNode }) {
@@ -29,9 +29,11 @@ type Props = {
     uniqueCounties: number;
     avgCapacity: number;
   };
+  highlightOperator?: string | null;
+  onHighlightClear?: () => void;
 };
 
-export default function Dashboard({ facilities, stats }: Props) {
+export default function Dashboard({ facilities, stats, highlightOperator, onHighlightClear }: Props) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
   // Top counties by capacity
   const countyData = useMemo(() => {
@@ -127,7 +129,7 @@ export default function Dashboard({ facilities, stats }: Props) {
 
   const maxBucket = Math.max(...capacityBuckets.map((b) => b.count));
 
-  // Top 20 parent company operators
+  // Top 30 parent company operators
   const operatorData = useMemo(() => {
     const map: Record<string, { name: string; sites: Facility[]; beds: number; counties: Set<string>; cities: Set<string>; gpos: { premier: number; vizient: number; both: number; none: number } }> = {};
     facilities.forEach((f) => {
@@ -146,10 +148,24 @@ export default function Dashboard({ facilities, stats }: Props) {
     return Object.values(map)
       .map((g) => ({ ...g, countyCount: g.counties.size, cityCount: g.cities.size, sites: g.sites.sort((a, b) => b.capacity - a.capacity) }))
       .sort((a, b) => b.sites.length - a.sites.length)
-      .slice(0, 20);
+      .slice(0, 30);
   }, [facilities]);
 
   const [expandedOperator, setExpandedOperator] = useState<string | null>(null);
+  const operatorSectionRef = useRef<HTMLDivElement>(null);
+
+  // Auto-expand and scroll to operator when navigated from Facilities tab
+  useEffect(() => {
+    if (highlightOperator) {
+      setExpandedOperator(highlightOperator);
+      // Scroll to the operator section after a brief delay for render
+      setTimeout(() => {
+        operatorSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
+      onHighlightClear?.();
+    }
+  }, [highlightOperator, onHighlightClear]);
+
   const [operatorSort, setOperatorSort] = useState<"sites" | "beds">("sites");
   const sortedOperators = useMemo(() => {
     if (operatorSort === "beds") return [...operatorData].sort((a, b) => b.beds - a.beds);
@@ -393,11 +409,11 @@ export default function Dashboard({ facilities, stats }: Props) {
         </div>
       </div>
 
-      {/* Top 20 Operators */}
-      <div className="card p-4 sm:p-6">
+      {/* Top 30 Operators */}
+      <div ref={operatorSectionRef} className="card p-4 sm:p-6">
         <div className="flex items-center justify-between mb-1">
           <h3 className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>
-            <Tip text="The 20 largest assisted living operators in California by portfolio size. Each operator may own facilities under dozens of different LLCs. Click to expand and see all sites.">Top 20 Operators</Tip>
+            <Tip text="The 30 largest assisted living operators in California by portfolio size. Each operator may own facilities under dozens of different LLCs. Click to expand and see all sites.">Top 30 Operators</Tip>
           </h3>
           <div className="flex items-center gap-1" style={{ background: "var(--bg-secondary)", borderRadius: 6, padding: 2 }}>
             {(["sites", "beds"] as const).map((s) => (

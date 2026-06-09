@@ -37,6 +37,7 @@ const OPERATORS = [
   ["Sequoia Living", "SEQUOIA"],
   ["Savant Senior Living", "SAVANT"],
   ["Episcopal Communities & Services", "EPISCOPAL COMMUNITIES", "ECS MANAGEMENT"],
+  ["Continuing Life", "LA COSTA GLEN", "REATA GLEN", "STONERIDGE CREEK", "GLEN AT SCRIPPS", "GLEN AT HEATHER", "WISTERIA WARNER", "UNIVERSITY VILLAGE THOUSAND", "MORNINGSIDE OF FULLERTON"],
 ];
 
 const facilities = JSON.parse(readFileSync(FACILITIES_PATH, "utf-8"));

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import facilitiesData from "../data/facilities.json";
 import Dashboard from "../components/Dashboard";
 import ZipCodes from "../components/ZipCodes";
@@ -40,7 +40,13 @@ type TabId = "dashboard" | "map" | "zipcodes" | "bulk" | "facilities";
 export default function Home() {
   const [activeTab, setActiveTab] = useState<TabId>("dashboard");
   const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const [highlightOperator, setHighlightOperator] = useState<string | null>(null);
   const facilities = facilitiesData as Facility[];
+
+  const navigateToOperator = useCallback((operatorName: string) => {
+    setHighlightOperator(operatorName);
+    setActiveTab("dashboard");
+  }, []);
 
   // Load saved theme on mount
   useEffect(() => {
@@ -152,11 +158,11 @@ export default function Home() {
       </header>
 
       <main className="main-content relative z-10 max-w-[1440px] mx-auto px-4 sm:px-6 py-6 sm:py-8">
-        {activeTab === "dashboard" && <Dashboard facilities={facilities} stats={stats} />}
+        {activeTab === "dashboard" && <Dashboard facilities={facilities} stats={stats} highlightOperator={highlightOperator} onHighlightClear={() => setHighlightOperator(null)} />}
         {activeTab === "map" && <MapTab facilities={facilities} />}
         {activeTab === "zipcodes" && <ZipCodes facilities={facilities} />}
         {activeTab === "bulk" && <BulkLookup facilities={facilities} />}
-        {activeTab === "facilities" && <Facilities facilities={facilities} />}
+        {activeTab === "facilities" && <Facilities facilities={facilities} onNavigateToOperator={navigateToOperator} />}
       </main>
 
       <footer className="footer-content relative z-10 text-center py-6 sm:py-8 px-4" style={{ borderTop: "1px solid var(--border)" }}>

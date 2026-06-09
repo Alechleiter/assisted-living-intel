@@ -6,12 +6,13 @@ import type { Facility } from "../app/page";
 
 type Props = {
   facilities: Facility[];
+  onNavigateToOperator?: (name: string) => void;
 };
 
 type SortKey = "name" | "city" | "county" | "capacity" | "zip" | "status" | "gpo";
 type SortDir = "asc" | "desc";
 
-export default function Facilities({ facilities }: Props) {
+export default function Facilities({ facilities, onNavigateToOperator }: Props) {
   const [search, setSearch] = useState("");
   const [countyFilter, setCountyFilter] = useState("ALL");
   const [statusFilter, setStatusFilter] = useState("ALL");
@@ -334,6 +335,28 @@ export default function Facilities({ facilities }: Props) {
                         )}
                       </div>
                       <div className="col-span-2">
+                        <p className="text-[10px] uppercase tracking-wider" style={{ color: "var(--text-muted)" }}>Operator</p>
+                        {f.parentCompany && f.parentCompany !== "Independent" ? (
+                          <button
+                            className="text-sm font-medium mt-0.5 px-2 py-0.5 rounded-full inline-flex items-center gap-1 transition-colors"
+                            style={{
+                              background: "var(--accent-dim)",
+                              color: "var(--accent)",
+                              border: "1px solid var(--accent)",
+                              cursor: "pointer",
+                            }}
+                            onClick={(e) => { e.stopPropagation(); onNavigateToOperator?.(f.parentCompany); }}
+                          >
+                            {f.parentCompany}
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="9 18 15 12 9 6" />
+                            </svg>
+                          </button>
+                        ) : (
+                          <p className="text-sm" style={{ color: "var(--text-muted)" }}>Independent</p>
+                        )}
+                      </div>
+                      <div className="col-span-2">
                         <p className="text-[10px] uppercase tracking-wider" style={{ color: "var(--text-muted)" }}>Address</p>
                         <p className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>{f.address}, {f.city}, {f.state} {f.zip}</p>
                       </div>
@@ -513,19 +536,38 @@ export default function Facilities({ facilities }: Props) {
                                   </p>
                                 </div>
                               </div>
-                              {/* Full Address */}
+                              {/* Operator */}
                               <div className="detail-item">
                                 <div className="detail-icon">
                                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
-                                    <circle cx="12" cy="10" r="3" />
+                                    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                                    <circle cx="9" cy="7" r="4" />
+                                    <path d="M23 21v-2a4 4 0 00-3-3.87" />
+                                    <path d="M16 3.13a4 4 0 010 7.75" />
                                   </svg>
                                 </div>
                                 <div>
-                                  <p className="text-xs uppercase tracking-wider mb-0.5" style={{ color: "var(--text-muted)" }}>Address</p>
-                                  <p className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>
-                                    {f.address}, {f.city}, {f.state} {f.zip}
-                                  </p>
+                                  <p className="text-xs uppercase tracking-wider mb-0.5" style={{ color: "var(--text-muted)" }}>Operator</p>
+                                  {f.parentCompany && f.parentCompany !== "Independent" ? (
+                                    <button
+                                      className="text-sm font-medium px-2.5 py-0.5 rounded-full inline-flex items-center gap-1 transition-colors"
+                                      style={{
+                                        background: "var(--accent-dim)",
+                                        color: "var(--accent)",
+                                        border: "1px solid var(--accent)",
+                                        cursor: "pointer",
+                                        fontFamily: "var(--font-body)",
+                                      }}
+                                      onClick={(e) => { e.stopPropagation(); onNavigateToOperator?.(f.parentCompany); }}
+                                    >
+                                      {f.parentCompany}
+                                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                        <polyline points="9 18 15 12 9 6" />
+                                      </svg>
+                                    </button>
+                                  ) : (
+                                    <p className="text-sm font-medium" style={{ color: "var(--text-muted)" }}>Independent</p>
+                                  )}
                                 </div>
                               </div>
                             </div>
